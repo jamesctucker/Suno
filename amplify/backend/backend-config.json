@@ -1,6 +1,6 @@
 {
   "auth": {
-    "suno0d035579": {
+    "sunobdc1a1b9": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

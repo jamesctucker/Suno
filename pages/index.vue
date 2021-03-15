@@ -2,8 +2,6 @@
   <div class="container">
     <amplify-authenticator v-if="authState !== 'signedin'" class="container" />
     <div v-if="authState === 'signedin' && user">
-      <h1>Hello, {{ user.username }}</h1>
-      <button v-on:click="signOut">Sign Out</button>
       <CBox
         v-bind="mainStyles[colorMode]"
         d="flex"
@@ -11,10 +9,14 @@
         h="100vh"
         flex-dir="column"
         justify-content="center"
+        align-items="center"
       >
         <CHeading text-align="center" mb="4">
-          ⚡️ Hello chakra-ui/vue
+          Hello {{ user.name }}, welcome to Suno!
         </CHeading>
+        <CButton variant-color="green" mb="4" max-w="125px" @click="signOut"
+          >Sign Out</CButton
+        >
         <CFlex justify="center" direction="column" align="center">
           <CBox mb="3">
             <CIconButton
@@ -25,68 +27,7 @@
               "
               @click="toggleColorMode"
             />
-            <CButton left-icon="info" variant-color="blue" @click="showToast">
-              Show Toast
-            </CButton>
           </CBox>
-          <CAvatarGroup>
-            <CAvatar
-              name="Evan You"
-              alt="Evan You"
-              src="https://pbs.twimg.com/profile_images/1206997998900850688/cTXTQiHm_400x400.jpg"
-            >
-              <CAvatarBadge size="1.0em" bg="green.500" />
-            </CAvatar>
-            <CAvatar
-              name="Jonathan Bakebwa"
-              alt="Jonathan Bakebwa"
-              src="https://res.cloudinary.com/xtellar/image/upload/v1572857445/me_zqos4e.jpg"
-            >
-              <CAvatarBadge size="1.0em" bg="green.500" />
-            </CAvatar>
-            <CAvatar
-              name="Segun Adebayo"
-              alt="Segun Adebayo"
-              src="https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg"
-            >
-              <CAvatarBadge size="1.0em" bg="green.500" />
-            </CAvatar>
-            <CAvatar src="pop">
-              <CAvatarBadge
-                size="1.0em"
-                border-color="papayawhip"
-                bg="tomato"
-              />
-            </CAvatar>
-          </CAvatarGroup>
-          <CButton
-            left-icon="close"
-            variant-color="red"
-            mt="3"
-            @click="showModal = true"
-          >
-            Delete Account
-          </CButton>
-          <CModal :is-open="showModal">
-            <CModalOverlay />
-            <CModalContent>
-              <CModalHeader>Are you sure?</CModalHeader>
-              <CModalBody>Deleting user cannot be undone</CModalBody>
-              <CModalFooter>
-                <CButton @click="showModal = false">
-                  Cancel
-                </CButton>
-                <CButton
-                  margin-left="3"
-                  variant-color="red"
-                  @click="showModal = false"
-                >
-                  Delete User
-                </CButton>
-              </CModalFooter>
-              <CModalCloseButton @click="showModal = false" />
-            </CModalContent>
-          </CModal>
         </CFlex>
       </CBox>
     </div>
@@ -94,8 +35,7 @@
 </template>
 
 <script lang="js">
-import { onAuthUIStateChange } from '@aws-amplify/ui-components'
-import { Auth }  from 'aws-amplify';
+import { mapActions, mapState } from 'vuex';
 import {
   CBox,
   CButton,
@@ -147,11 +87,13 @@ export default {
           color: 'gray.900'
         }
       },
-      user: undefined,
-      authState: undefined
     }
   },
   computed: {
+    ...mapState({
+      authState: state => state.auth.authState,
+      user: state => state.auth.user
+    }),
     colorMode () {
       return this.$chakraColorMode()
     },
@@ -163,15 +105,13 @@ export default {
     }
   },
   created() {
-    onAuthUIStateChange((authState, authData) => {
-      this.authState = authState;
-      this.user = authData;
-    })
+    this.checkAuthState();
   },
   beforeDestroy() {
     return onAuthUIStateChange;
   },
   methods: {
+    ...mapActions('auth', ['checkAuthState']),
     showToast () {
       this.$toast({
         title: 'Account created.',
