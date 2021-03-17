@@ -1,0 +1,20 @@
+type User
+  @model
+  @key(name: "byUserName", fields: ["username"], queryField: "userByUserName") {
+  username: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type Todo
+  @model
+  @key(name: "byUserID", fields: ["userID"], queryField: "todoByUserID") {
+  userID: ID!
+  name: String!
+  note: String
+  priority: Int
+  user: User @connection
+  complete: Boolean
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
