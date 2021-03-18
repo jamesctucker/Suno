@@ -16,6 +16,9 @@
         <CHeading text-align="center" mb="4">
           Hello {{ authUser.username }}.
         </CHeading>
+        <p v-if="isOnline">You are ONLINE</p>
+        <p v-else>You are OFFLINE</p>
+        <p v-show="isSynced">SYNCED!</p>
         <CButton variant-color="green" mb="4" max-w="125px" @click="signOut"
           >Sign Out</CButton
         >
@@ -30,6 +33,7 @@
 <script lang="js">
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { Auth }  from 'aws-amplify';
+import { Hub } from 'aws-amplify';
 
 import {
   CBox,
@@ -50,6 +54,12 @@ export default {
     CHeading
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
+  data() {
+    return {
+      isOnline: false,
+      isSynced: false
+    }
+  },
   watch: {
     authState: function() {
       if (this.authState === 'signedin') {
@@ -74,6 +84,18 @@ export default {
   },
   created() {
     this.checkAuthState();
+    Hub.listen('datastore', (data) => {
+      if (data.payload.event === 'networkStatus') {
+        this.isOnline = data.payload.data.active;
+        if (!data.payload.data.active) {
+          this.isSynced = false;
+        }
+      }
+      if (data.payload.data?.isDeltaSync) {
+       this.isSynced = data.payload.data.isDeltaSync
+      }
+      console.log(data)
+    })
   },
   beforeDestroy() {
     return this.checkAuthState();
