@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@aws-amplify/core": "^3.8.18",
+    "@aws-amplify/datastore": "^2.9.12",
     "@aws-amplify/ui-vue": "^1.0.4",
     "@chakra-ui/nuxt": "^0.2.4",
     "@nuxtjs/emotion": "^0.1.0",
