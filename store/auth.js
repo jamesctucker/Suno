@@ -1,9 +1,15 @@
-import { onAuthUIStateChange } from "@aws-amplify/ui-components";
+import { onAuthUIStateChange, AuthState } from "@aws-amplify/ui-components";
 
 export const state = () => ({
   authState: undefined,
   user: undefined
 });
+
+export const getters = {
+  isSignedIn(state) {
+    return state.authState === "signedin";
+  }
+};
 
 export const mutations = {
   set(state, { status, user }) {
@@ -13,10 +19,12 @@ export const mutations = {
 };
 
 export const actions = {
-  checkAuthState({ commit }) {
-    onAuthUIStateChange((authState, authData) => {
-      console.log(authData);
-      commit("set", { status: authState, user: authData });
+  checkAuthState({ commit, dispatch }) {
+    onAuthUIStateChange((nextAuthState, authData) => {
+      if (nextAuthState === AuthState.ConfirmSignUp) {
+        dispatch("user/findOrCreateUser", authData, { root: true });
+      }
+      commit("set", { status: nextAuthState, user: authData });
     });
   }
 };

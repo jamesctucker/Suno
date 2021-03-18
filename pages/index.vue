@@ -1,127 +1,93 @@
 <template>
   <div class="container">
-    <amplify-authenticator v-if="authState !== 'signedin'" class="container" />
-    <div v-if="authState === 'signedin' && user">
+    <amplify-authenticator
+      v-if="authState !== 'signedin'"
+      class="container"
+      handle-submit="createNewUser"
+    />
+    <div v-if="authState === 'signedin' && authUser">
       <CBox
-        v-bind="mainStyles[colorMode]"
         d="flex"
         w="100vw"
-        h="100vh"
         flex-dir="column"
         justify-content="center"
         align-items="center"
       >
         <CHeading text-align="center" mb="4">
-          Hello {{ user.name }}, welcome to Suno!
+          Hello {{ authUser.username }}.
         </CHeading>
         <CButton variant-color="green" mb="4" max-w="125px" @click="signOut"
           >Sign Out</CButton
         >
-        <CFlex justify="center" direction="column" align="center">
-          <CBox mb="3">
-            <CIconButton
-              mr="3"
-              :icon="colorMode === 'light' ? 'moon' : 'sun'"
-              :aria-label="
-                `Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`
-              "
-              @click="toggleColorMode"
-            />
-          </CBox>
-        </CFlex>
+        <NuxtChild :user="currentUser" :todos="todos" />
+        <nuxt-link to="/focus">Focus</nuxt-link>
+        <nuxt-link to="/matrix">Prioritize</nuxt-link>
       </CBox>
     </div>
   </div>
 </template>
 
 <script lang="js">
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
+import { Auth }  from 'aws-amplify';
+
 import {
   CBox,
   CButton,
-  CAvatarGroup,
-  CAvatar,
-  CAvatarBadge,
-  CModal,
-  CModalContent,
-  CModalOverlay,
-  CModalHeader,
-  CModalFooter,
-  CModalBody,
-  CModalCloseButton,
-  CIconButton,
   CFlex,
   CHeading
 } from '@chakra-ui/vue'
 
 export default {
+  key(route) {
+    return route.fullPath
+  },
   name: 'App',
   components: {
     CBox,
     CButton,
-    CAvatarGroup,
-    CAvatar,
-    CAvatarBadge,
-    CModal,
-    CModalContent,
-    CModalOverlay,
-    CModalHeader,
-    CModalFooter,
-    CModalBody,
-    CModalCloseButton,
-    CIconButton,
     CFlex,
     CHeading
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
-  data () {
-    return {
-      showModal: false,
-      mainStyles: {
-        dark: {
-          bg: 'gray.700',
-          color: 'whiteAlpha.900'
-        },
-        light: {
-          bg: 'white',
-          color: 'gray.900'
-        }
-      },
+  watch: {
+    authState: function() {
+      if (this.authState === 'signedin') {
+        return this.loadUser(this.authUser);
+      }
+    },
+    currentUser: function() {
+      return this.loadToDos(this.currentUser.id)
     }
   },
   computed: {
     ...mapState({
       authState: state => state.auth.authState,
-      user: state => state.auth.user
+      authUser: state => state.auth.user,
+      currentUser: state => state.user.user,
+      todos: state => state.todos.todos
     }),
-    colorMode () {
-      return this.$chakraColorMode()
-    },
+    ...mapGetters('auth', ['isSignedIn']),
     theme () {
       return this.$chakraTheme()
     },
-    toggleColorMode () {
-      return this.$toggleColorMode
-    }
   },
   created() {
     this.checkAuthState();
   },
   beforeDestroy() {
-    return onAuthUIStateChange;
+    return this.checkAuthState();
   },
   methods: {
     ...mapActions('auth', ['checkAuthState']),
-    showToast () {
-      this.$toast({
-        title: 'Account created.',
-        description: "We've created your account for you.",
-        status: 'success',
-        duration: 10000,
-        isClosable: true
-      })
-    },
+    ...mapActions('user', ['loadUser']),
+    ...mapActions('todos', ['loadToDos']),
     signOut: async () => Auth.signOut()
   }
 }
 </script>
+<style>
+amplify-authenticator {
+  width: 50%;
+}
+</style>
