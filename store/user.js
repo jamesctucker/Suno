@@ -1,6 +1,5 @@
-import { createUser } from "../src/graphql/mutations";
-import { userByUserName } from "../src/graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
+import { DataStore } from "aws-amplify";
+import { User } from "../src/models";
 
 export const state = () => ({
   user: undefined
@@ -15,19 +14,22 @@ export const mutations = {
 export const actions = {
   async loadUser({ commit }, authUser) {
     try {
-      const user = await API.graphql(
-        graphqlOperation(userByUserName, { username: authUser.username })
+      //   const user = await API.graphql(
+      //     graphqlOperation(userByUserName, { username: authUser.username })
+      //   );
+      //   console.log(user.data.userByUserName.items[0]);
+      const user = await DataStore.query(User, u =>
+        u.username("eq", authUser.username)
       );
-      console.log(user.data.userByUserName.items[0]);
-      commit("setUser", user.data.userByUserName.items[0]);
+      console.log(user);
+      commit("setUser", user[0]);
     } catch (error) {
       console.log(error);
     }
   },
   async findOrCreateUser({ commit }, authData) {
     try {
-      const newUser = { username: authData.username };
-      await API.graphql(graphqlOperation(createUser, { input: newUser }));
+      await DataStore.save(new User({ username: authData.username }));
     } catch (error) {
       console.error(error);
     }

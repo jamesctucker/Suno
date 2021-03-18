@@ -1,6 +1,5 @@
-import { API, graphqlOperation } from "aws-amplify";
-import { createTodo } from "../src/graphql/mutations";
-import { todoByUserId } from "../src/graphql/queries";
+import { DataStore, Predicates } from "aws-amplify";
+import { Todo } from "../src/models";
 
 export const state = () => ({
   todos: undefined
@@ -15,15 +14,14 @@ export const mutations = {
 export const actions = {
   async createToDo({ dispatch }, { userID, name, note, priority }) {
     try {
-      const todo = {
-        userID: userID,
-        name: name,
-        note: note,
-        priority: priority,
-        complete: false
-      };
-      const response = await API.graphql(
-        graphqlOperation(createTodo, { input: todo })
+      const response = await DataStore.save(
+        new Todo({
+          userID: userID,
+          name: name,
+          note: note,
+          priority: priority,
+          complete: false
+        })
       );
 
       dispatch("loadToDos", userID);
@@ -33,9 +31,13 @@ export const actions = {
     }
   },
   async loadToDos({ commit }, userID) {
-    const response = await API.graphql(
-      graphqlOperation(todoByUserId, { userID: userID })
+    // const response = await API.graphql(
+    //   graphqlOperation(todoByUserId, { userID: userID })
+    // );
+    const response = await DataStore.query(Todo, todo =>
+      todo.userID("eq", userID)
     );
-    commit("setToDos", response.data.todoByUserID.items);
+    console.log("fetched todos", response);
+    commit("setToDos", response);
   }
 };
