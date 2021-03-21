@@ -1,35 +1,106 @@
 <template>
-  <div class="Matrix">
-    <c-flex justify="center" align="center" direction="column">
-      <c-input
-        v-model="todo"
-        type="text"
-        placeholder="todo..."
-        max-width="300px"
-        m="2"
-      />
-      <c-select
-        v-model="priority"
-        placeholder="Priority"
-        max-width="300px"
-        m="2"
-        ><option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option><option value="4">4</option></c-select
+  <div v-if="todos" class="Matrix">
+    <CHeading text-align="center" mb="4" mt="8">
+      Eisenhower Matrix
+    </CHeading>
+    <c-flex>
+      <c-flex justify="start" align="left" direction="column">
+        <c-flex mr="4">
+          <c-input
+            v-model="todo"
+            type="text"
+            placeholder="todo..."
+            max-width="300px"
+            m="2"
+            @keyup.enter="create"
+          />
+        </c-flex>
+        <c-flex>
+          <draggable
+            class="list-group"
+            v-model="unassigned"
+            group="todos"
+            @change="change($event, 'unassigned', 0)"
+            @start="start"
+            @end="end"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in unassigned"
+              :key="element.todo"
+            >
+              {{ element.name }}
+            </div>
+          </draggable>
+        </c-flex>
+      </c-flex>
+      <c-grid w="600px" template-columns="repeat(2, 1fr)" gap="4"
+        ><c-box w="100%" h="64" bg="red.300"
+          ><draggable
+            class="list-group"
+            v-model="priority1"
+            group="todos"
+            name="one"
+            @change="change($event, 'priority1', 1)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority1"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable></c-box
+        >
+        <c-box w="100%" h="64" bg="orange.300"
+          ><draggable
+            class="list-group"
+            v-model="priority2"
+            group="todos"
+            @change="change($event, 'priority2', 2)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority2"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable></c-box
+        >
+        <c-box w="100%" h="64" bg="yellow.300"
+          ><draggable
+            class="list-group"
+            v-model="priority3"
+            group="todos"
+            @change="change($event, 'priority3', 3)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority3"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable></c-box
+        >
+        <c-box w="100%" h="64" bg="green.300"
+          ><draggable
+            class="list-group"
+            v-model="priority4"
+            group="todos"
+            @change="change($event, 'priority4', 4)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority4"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable></c-box
+        ></c-grid
       >
-      <c-button
-        m="2"
-        :is-disabled="disabled"
-        variant-color="green"
-        @click="create"
-        >add</c-button
-      >
-      <h1>Todos</h1>
-      <c-list v-if="todos">
-        <c-list-item v-for="(todo, index) in todos" :key="index">{{
-          todo.name
-        }}</c-list-item>
-      </c-list>
     </c-flex>
   </div>
 </template>
@@ -41,9 +112,13 @@ import {
   CButton,
   CFlex,
   CList,
-  CListItem
+  CListItem,
+  CHeading,
+  CGrid,
+  CBox
 } from "@chakra-ui/vue";
 import { mapActions, mapState } from "vuex";
+import draggable from "vuedraggable";
 
 export default {
   key(route) {
@@ -56,58 +131,112 @@ export default {
     CButton,
     CFlex,
     CListItem,
-    CList
+    CList,
+    CHeading,
+    CGrid,
+    CBox,
+    draggable
   },
   props: {
-    user: Object,
-    todos: Array
+    user: Object
   },
   data() {
     return {
       todo: undefined,
       note: undefined,
-      priority: undefined
+      priority: undefined,
+      unassigned: undefined,
+      priority1: undefined,
+      priority2: [],
+      priority3: [],
+      priority4: [],
+      dragging: false,
+      reorderedList: undefined
     };
   },
+  watch: {
+    todos: function() {
+      this.unassigned = this.todos
+        .filter(todo => todo.priority === 0)
+        .sort((a, b) => a.order - b.order);
+      this.priority1 = this.todos.filter(todo => todo.priority === 1);
+      this.priority2 = this.todos.filter(todo => todo.priority === 2);
+      this.priority3 = this.todos.filter(todo => todo.priority === 3);
+      this.priority4 = this.todos.filter(todo => todo.priority === 4);
+    }
+  },
   computed: {
-    // ...mapState({
-    //   // user: state => state.user.user,
-    //   todos: state => state.todos.todos
-    // }),
+    ...mapState({ todos: state => state.todos.todos }),
     disabled() {
       return !this.todo;
     }
   },
-  watch: {
-    user: function() {
-      return this.loadToDos(this.user.id);
-    }
-  },
   methods: {
-    ...mapActions("todos", ["createToDo", "loadToDos"]),
+    ...mapActions("todos", [
+      "createToDo",
+      "loadToDos",
+      "updatePriority",
+      "updateOrder"
+    ]),
     async create() {
       await this.createToDo({
         userID: this.user.id,
         name: this.todo,
-        note: this.note,
-        priority: this.priority
+        note: this.note
       });
       this.resetField();
-      return this.showToast();
     },
     resetField() {
       this.todo = undefined;
       this.note = undefined;
       this.priority = undefined;
     },
-    showToast() {
-      this.$toast({
-        title: "Success",
-        description: "Your todo is now on someone else's computer",
-        status: "info",
-        duration: 10000
+    log: function(evt) {
+      console.log(evt);
+    },
+    change($event, list, priority) {
+      if ($event.added) {
+        this.addToDo($event, priority);
+      }
+      if ($event.moved) {
+        console.log("moved!");
+        this.reorderToDos(list);
+      }
+    },
+    start() {
+      this.dragging = true;
+    },
+    end() {
+      this.dragging = false;
+    },
+    addToDo($event, priority) {
+      this.updatePriority({
+        originalToDo: $event.added.element,
+        newPriority: priority
       });
+    },
+    reorderToDos(list) {
+      if (list === "unassigned") {
+        this.updateOrder(this.unassigned);
+      } else if (list === "priority1") {
+        this.updateOrder(this.priority1);
+      } else if (list === "priority2") {
+        this.updateOrder(this.priority2);
+      } else if (list === "priority3") {
+        this.updateOrder(this.priority3);
+      } else {
+        this.updateOrder(this.priority4);
+      }
     }
   }
 };
 </script>
+<style scoped>
+.list-group {
+  height: 100%;
+}
+
+.list-group-item {
+  padding: 8px 0px 8px 16px;
+}
+</style>
