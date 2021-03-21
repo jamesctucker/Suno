@@ -19,7 +19,7 @@ export declare class Todo {
   readonly name: string;
   readonly note?: string;
   readonly priority?: number;
-  readonly user?: User;
+  readonly order?: number;
   readonly complete?: boolean;
   readonly createdAt?: string;
   readonly updatedAt?: string;

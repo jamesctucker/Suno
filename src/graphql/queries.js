@@ -81,15 +81,7 @@ export const syncTodos = /* GraphQL */ `
         name
         note
         priority
-        user {
-          id
-          username
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-        }
+        order
         complete
         createdAt
         updatedAt
@@ -110,15 +102,7 @@ export const getTodo = /* GraphQL */ `
       name
       note
       priority
-      user {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      order
       complete
       createdAt
       updatedAt
@@ -141,15 +125,7 @@ export const listTodos = /* GraphQL */ `
         name
         note
         priority
-        user {
-          id
-          username
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-        }
+        order
         complete
         createdAt
         updatedAt
@@ -180,48 +156,6 @@ export const userByUserName = /* GraphQL */ `
       items {
         id
         username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const todoByUserId = /* GraphQL */ `
-  query TodoByUserId(
-    $userID: ID
-    $sortDirection: ModelSortDirection
-    $filter: ModelTodoFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    todoByUserID(
-      userID: $userID
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userID
-        name
-        note
-        priority
-        user {
-          id
-          username
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-        }
-        complete
         createdAt
         updatedAt
         _version

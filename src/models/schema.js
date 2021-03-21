@@ -89,18 +89,12 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "user": {
-                    "name": "user",
+                "order": {
+                    "name": "order",
                     "isArray": false,
-                    "type": {
-                        "model": "User"
-                    },
+                    "type": "Int",
                     "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "todoUserId"
-                    }
+                    "attributes": []
                 },
                 "complete": {
                     "name": "complete",
@@ -130,21 +124,11 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byUserID",
-                        "fields": [
-                            "userID"
-                        ],
-                        "queryField": "todoByUserID"
-                    }
                 }
             ]
         }
     },
     "enums": {},
     "nonModels": {},
-    "version": "e2bedffcf27b6d795d234758329636f5"
+    "version": "8c09c7deb2009f670bbb15b22d8d7212"
 };

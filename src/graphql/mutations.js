@@ -60,15 +60,7 @@ export const createTodo = /* GraphQL */ `
       name
       note
       priority
-      user {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      order
       complete
       createdAt
       updatedAt
@@ -89,15 +81,7 @@ export const updateTodo = /* GraphQL */ `
       name
       note
       priority
-      user {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      order
       complete
       createdAt
       updatedAt
@@ -118,15 +102,7 @@ export const deleteTodo = /* GraphQL */ `
       name
       note
       priority
-      user {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      order
       complete
       createdAt
       updatedAt

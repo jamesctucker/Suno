@@ -1,20 +1,19 @@
-type User
-  @model
-  @key(name: "byUserName", fields: ["username"], queryField: "userByUserName") {
+type User @model @key(name: "byUserName", fields: ["username"], queryField: "userByUserName") {
   username: String
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
+  id: ID!
 }
 
-type Todo
-  @model
-  @key(name: "byUserID", fields: ["userID"], queryField: "todoByUserID") {
+type Todo @model {
   userID: ID!
   name: String!
   note: String
   priority: Int
-  user: User @connection
+  order: Int
   complete: Boolean
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
+  id: ID!
 }
+ 

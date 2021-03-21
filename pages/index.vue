@@ -12,17 +12,36 @@
         flex-dir="column"
         justify-content="center"
         align-items="center"
+        mt="8"
       >
-        <CHeading text-align="center" mb="4">
-          Hello {{ authUser.username }}.
-        </CHeading>
-        <p v-if="isOnline">You are ONLINE</p>
+        <c-flex>
+          <CHeading text-align="center" mr="4" mb="4">
+            Hello {{ authUser.username }}.
+          </CHeading>
+          <CButton
+            variant-color="green"
+            mb="4"
+            mr="4"
+            max-w="125px"
+            @click="clearLocalData"
+            >Clear Data</CButton
+          >
+          <CButton variant-color="green" mb="4" max-w="125px" @click="signOut"
+            >Sign Out</CButton
+          >
+        </c-flex>
+        <!-- <p v-if="isOnline">You are ONLINE</p>
         <p v-else>You are OFFLINE</p>
-        <p v-show="isSynced">SYNCED!</p>
-        <CButton variant-color="green" mb="4" max-w="125px" @click="signOut"
-          >Sign Out</CButton
-        >
-        <NuxtChild :user="currentUser" :todos="todos" />
+        <p v-show="isSynced">SYNCED!</p> -->
+        <c-alert v-show="!isOnline" status="info">
+          <c-alert-icon />
+          You are offline
+        </c-alert>
+        <c-alert v-show="isSynced" status="success">
+          <c-alert-icon />
+          Data synced!
+        </c-alert>
+        <NuxtChild :user="currentUser" :todos="todos" keep-alive />
         <nuxt-link to="/focus">Focus</nuxt-link>
         <nuxt-link to="/matrix">Prioritize</nuxt-link>
       </CBox>
@@ -32,14 +51,17 @@
 
 <script lang="js">
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { Auth }  from 'aws-amplify';
-import { Hub } from 'aws-amplify';
+import { Auth, Hub, DataStore }  from 'aws-amplify';
 
 import {
   CBox,
   CButton,
   CFlex,
-  CHeading
+  CHeading,
+  CAlert,
+  CAlertIcon,
+  CAlertTitle,
+  CAlertDescription,
 } from '@chakra-ui/vue'
 
 export default {
@@ -51,23 +73,17 @@ export default {
     CBox,
     CButton,
     CFlex,
-    CHeading
+    CHeading,
+    CAlert,
+    CAlertIcon,
+    CAlertTitle,
+    CAlertDescription,
   },
   inject: ['$chakraColorMode', '$toggleColorMode'],
   data() {
     return {
       isOnline: false,
       isSynced: false
-    }
-  },
-  watch: {
-    authState: function() {
-      if (this.authState === 'signedin') {
-        return this.loadUser(this.authUser);
-      }
-    },
-    currentUser: function() {
-      return this.loadToDos(this.currentUser.id)
     }
   },
   computed: {
@@ -94,7 +110,6 @@ export default {
       if (data.payload.data?.isDeltaSync) {
        this.isSynced = data.payload.data.isDeltaSync
       }
-      console.log(data)
     })
   },
   beforeDestroy() {
@@ -104,7 +119,10 @@ export default {
     ...mapActions('auth', ['checkAuthState']),
     ...mapActions('user', ['loadUser']),
     ...mapActions('todos', ['loadToDos']),
-    signOut: async () => Auth.signOut()
+    signOut: async () => Auth.signOut(),
+    async clearLocalData() {
+      await DataStore.clear();
+    }
   }
 }
 </script>

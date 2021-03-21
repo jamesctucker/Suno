@@ -25,6 +25,9 @@ export const actions = {
         dispatch("user/findOrCreateUser", authData, { root: true });
       }
       commit("set", { status: nextAuthState, user: authData });
+      if (nextAuthState === "signedin") {
+        dispatch("user/loadUser", authData, { root: true });
+      }
     });
   }
 };
