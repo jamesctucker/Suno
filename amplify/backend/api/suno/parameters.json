@@ -1,5 +1,11 @@
 {
   "AppSyncApiName": "suno",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authsunobdc1a1b9",
+      "Outputs.UserPoolId"
+    ]
+  }
 }

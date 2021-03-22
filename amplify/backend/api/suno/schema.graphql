@@ -1,11 +1,20 @@
-type User @model @key(name: "byUserName", fields: ["username"], queryField: "userByUserName") {
+type List @model @auth(rules: [{allow: owner, operations: [read, create, update, delete]}]) {
+  id: ID!
+  name: String!
+  User: User @connection
+  Todos: [Todo] @connection(keyName: "byList", fields: ["id"])
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type User @model @key(name: "byUserName", fields: ["username"], queryField: "userByUserName") @auth(rules: [{allow: owner, operations: [read, create, update, delete]}]) {
   username: String
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
   id: ID!
 }
 
-type Todo @model {
+type Todo @model @key(name: "byList", fields: ["listID"]) @auth(rules: [{allow: owner, operations: [read, create, update, delete]}]) {
   userID: ID!
   name: String!
   note: String
@@ -15,5 +24,6 @@ type Todo @model {
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
   id: ID!
+  listID: ID
 }
  

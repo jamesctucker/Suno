@@ -4,6 +4,17 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 
 
+export declare class List {
+  readonly id: string;
+  readonly name: string;
+  readonly User?: User;
+  readonly Todos?: (Todo | null)[];
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  constructor(init: ModelInit<List>);
+  static copyOf(source: List, mutator: (draft: MutableModel<List>) => MutableModel<List> | void): List;
+}
+
 export declare class User {
   readonly id: string;
   readonly username?: string;
@@ -23,6 +34,7 @@ export declare class Todo {
   readonly complete?: boolean;
   readonly createdAt?: string;
   readonly updatedAt?: string;
+  readonly listID?: string;
   constructor(init: ModelInit<Todo>);
   static copyOf(source: Todo, mutator: (draft: MutableModel<Todo>) => MutableModel<Todo> | void): Todo;
 }
