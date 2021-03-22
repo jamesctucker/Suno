@@ -9,7 +9,7 @@ export const state = () => ({
 export const mutations = {
   setUser(state, data) {
     state.user = data;
-    state.loaded = true;
+    state.loaded = !!data;
   }
 };
 
@@ -18,9 +18,7 @@ export const actions = {
     try {
       console.log(authUser);
       if (!state.loaded) {
-        const user = await DataStore.query(User, u =>
-          u.username("eq", authUser.username)
-        );
+        const user = await DataStore.query(User);
         commit("setUser", user[0]);
         dispatch("todos/loadToDos", user[0].id, { root: true });
       }

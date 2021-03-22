@@ -4,8 +4,9 @@
       Eisenhower Matrix
     </CHeading>
     <c-flex>
+      <list-select />
       <c-flex justify="start" align="left" direction="column">
-        <c-flex mr="4">
+        <c-flex mr="4" direction="row" align="center">
           <c-input
             v-model="todo"
             type="text"
@@ -119,6 +120,7 @@ import {
 } from "@chakra-ui/vue";
 import { mapActions, mapState } from "vuex";
 import draggable from "vuedraggable";
+import ListSelect from "~/components/ListSelect.vue";
 
 export default {
   key(route) {
@@ -135,7 +137,8 @@ export default {
     CHeading,
     CGrid,
     CBox,
-    draggable
+    draggable,
+    ListSelect
   },
   props: {
     user: Object
