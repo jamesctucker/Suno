@@ -20,12 +20,10 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [],
+  buildModules: ["@nuxtjs/tailwindcss"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/chakra
-    "@chakra-ui/nuxt",
     // https://go.nuxtjs.dev/emotion
     "@nuxtjs/emotion",
     // https://go.nuxtjs.dev/pwa
@@ -37,6 +35,9 @@ export default {
     manifest: {
       lang: "en"
     }
+  },
+  tailwindcss: {
+    jit: true
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

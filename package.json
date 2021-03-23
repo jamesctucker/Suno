@@ -13,20 +13,24 @@
     "@aws-amplify/core": "^3.8.18",
     "@aws-amplify/datastore": "^2.9.12",
     "@aws-amplify/ui-vue": "^1.0.4",
-    "@chakra-ui/nuxt": "^0.2.4",
     "@nuxtjs/emotion": "^0.1.0",
     "@nuxtjs/pwa": "^3.3.5",
+    "@tailwindcss/aspect-ratio": "^0.2.0",
+    "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/typography": "^0.4.0",
     "aws-amplify": "^3.3.23",
     "core-js": "^3.8.3",
     "nuxt": "^2.14.12",
     "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
+    "@nuxtjs/tailwindcss": "^4.0.1",
     "@vue/test-utils": "^1.1.2",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
     "jest": "^26.6.3",
+    "postcss": "^8.2.8",
     "vue-jest": "^3.0.4"
   }
 }
