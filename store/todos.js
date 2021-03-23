@@ -17,7 +17,9 @@ export const getters = {
     return state.todos
       .filter(
         todo =>
-          todo.priority === 0 && todo.listID === rootState.lists.currentList
+          todo.priority === 0 &&
+          !todo.complete &&
+          todo.listID === rootState.lists.currentList
       )
       .sort((a, b) => a.order - b.order);
   },
@@ -64,8 +66,6 @@ export const actions = {
           priority: 0,
           complete: false,
           listID: rootState.lists.currentList
-            ? rootState.lists.currentList
-            : null
         })
       );
       dispatch("loadTodos", response.userID);
@@ -105,5 +105,14 @@ export const actions = {
     } catch (error) {
       console.error(error);
     }
+  },
+  async toggleComplete({ dispatch }, original) {
+    const response = await DataStore.save(
+      Todo.copyOf(original, updated => {
+        updated.complete = !original.complete;
+      })
+    );
+    console.log(response);
+    dispatch("loadTodos");
   }
 };

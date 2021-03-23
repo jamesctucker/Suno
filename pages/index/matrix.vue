@@ -96,7 +96,11 @@
               v-for="element in unassigned"
               :key="element.todo"
             >
-              {{ element.name }}
+              <input type="checkbox" @change="handleChange(element)" />
+              <p v-if="isComplete">
+                <del>{{ element.name }}</del>
+              </p>
+              <p v-else>{{ element.name }}</p>
             </div>
           </draggable>
         </div>
@@ -131,7 +135,8 @@ export default {
       priority3: undefined,
       priority4: undefined,
       dragging: false,
-      reorderedList: undefined
+      reorderedList: undefined,
+      isComplete: undefined
     };
   },
   computed: {
@@ -167,19 +172,23 @@ export default {
     }
   },
   mounted() {
+    // this.setCurrentList(null);
+  },
+  async fetch() {
+    await this.loadTodos();
     this.unassigned = this.unassignedTodos;
     this.priority1 = this.priorityOneTodos;
     this.priority2 = this.priorityTwoTodos;
     this.priority3 = this.priorityThreeTodos;
     this.priority4 = this.priorityFourTodos;
-    // this.setCurrentList(null);
   },
   methods: {
     ...mapActions("todos", [
       "createTodo",
       "loadTodos",
       "updatePriority",
-      "updateOrder"
+      "updateOrder",
+      "toggleComplete"
     ]),
     ...mapMutations("lists", ["setCurrentList"]),
 
@@ -190,9 +199,6 @@ export default {
         note: this.note
       });
       this.resetField();
-    },
-    async mounted() {
-      this.loadTodos();
     },
     resetField() {
       this.todo = undefined;
@@ -235,6 +241,14 @@ export default {
       } else {
         this.updateOrder(this.priority4);
       }
+    },
+    handleChange(todo) {
+      console.log(todo);
+      this.isComplete = !this.isComplete;
+      setTimeout(async () => {
+        await this.toggleComplete(todo);
+        this.isComplete = !this.isComplete;
+      }, 3000);
     }
   }
 };
