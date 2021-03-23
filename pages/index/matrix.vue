@@ -1,22 +1,88 @@
 <template>
-  <div v-if="todos" class="Matrix">
-    <CHeading text-align="center" mb="4" mt="8">
+  <div v-if="todos" class="Matrix w-full">
+    <!-- <h1>
       Eisenhower Matrix
-    </CHeading>
-    <c-flex>
-      <list-select />
-      <c-flex justify="start" align="left" direction="column">
-        <c-flex mr="4" direction="row" align="center">
-          <c-input
+    </h1> -->
+    <div class="flex">
+      <!-- column 1 -->
+      <div class="grid grid-cols-2 gap-4 w-3/4">
+        <div class="col-span-1 w-full h-64 bg-red-400">
+          <draggable
+            class="list-group"
+            v-model="priority1"
+            group="todos"
+            name="one"
+            @change="change($event, 'priority1', 1)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority1"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable>
+        </div>
+        <div class="col-span-1 w-full h-64 bg-yellow-500">
+          <draggable
+            class="list-group"
+            v-model="priority2"
+            group="todos"
+            @change="change($event, 'priority2', 2)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority2"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable>
+        </div>
+        <div class="col-span-1 w-full h-64 bg-yellow-300">
+          <draggable
+            class="list-group"
+            v-model="priority3"
+            group="todos"
+            @change="change($event, 'priority3', 3)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority3"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable>
+        </div>
+        <div class="col-span-1 w-full h-64 bg-green-400">
+          <draggable
+            class="list-group"
+            v-model="priority4"
+            group="todos"
+            @change="change($event, 'priority4', 4)"
+          >
+            <div
+              class="list-group-item"
+              v-for="element in priority4"
+              :key="element.id"
+            >
+              {{ element.name }}
+            </div>
+          </draggable>
+        </div>
+      </div>
+      <!-- column 2 -->
+      <div class="flex flex-col justify-start items-left ml-4 w-1/4">
+        <div class="flex flex-row items-center mr-4 ">
+          <input
             v-model="todo"
             type="text"
             placeholder="todo..."
-            max-width="300px"
-            m="2"
             @keyup.enter="create"
           />
-        </c-flex>
-        <c-flex>
+        </div>
+        <div class="flex">
           <draggable
             class="list-group"
             v-model="unassigned"
@@ -33,94 +99,15 @@
               {{ element.name }}
             </div>
           </draggable>
-        </c-flex>
-      </c-flex>
-      <c-grid w="600px" template-columns="repeat(2, 1fr)" gap="4"
-        ><c-box w="100%" h="64" bg="red.300"
-          ><draggable
-            class="list-group"
-            v-model="priority1"
-            group="todos"
-            name="one"
-            @change="change($event, 'priority1', 1)"
-          >
-            <div
-              class="list-group-item"
-              v-for="element in priority1"
-              :key="element.id"
-            >
-              {{ element.name }}
-            </div>
-          </draggable></c-box
-        >
-        <c-box w="100%" h="64" bg="orange.300"
-          ><draggable
-            class="list-group"
-            v-model="priority2"
-            group="todos"
-            @change="change($event, 'priority2', 2)"
-          >
-            <div
-              class="list-group-item"
-              v-for="element in priority2"
-              :key="element.id"
-            >
-              {{ element.name }}
-            </div>
-          </draggable></c-box
-        >
-        <c-box w="100%" h="64" bg="yellow.300"
-          ><draggable
-            class="list-group"
-            v-model="priority3"
-            group="todos"
-            @change="change($event, 'priority3', 3)"
-          >
-            <div
-              class="list-group-item"
-              v-for="element in priority3"
-              :key="element.id"
-            >
-              {{ element.name }}
-            </div>
-          </draggable></c-box
-        >
-        <c-box w="100%" h="64" bg="green.300"
-          ><draggable
-            class="list-group"
-            v-model="priority4"
-            group="todos"
-            @change="change($event, 'priority4', 4)"
-          >
-            <div
-              class="list-group-item"
-              v-for="element in priority4"
-              :key="element.id"
-            >
-              {{ element.name }}
-            </div>
-          </draggable></c-box
-        ></c-grid
-      >
-    </c-flex>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import {
-  CInput,
-  CSelect,
-  CButton,
-  CFlex,
-  CList,
-  CListItem,
-  CHeading,
-  CGrid,
-  CBox
-} from "@chakra-ui/vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import draggable from "vuedraggable";
-import ListSelect from "~/components/ListSelect.vue";
 
 export default {
   key(route) {
@@ -128,17 +115,7 @@ export default {
   },
   name: "Matrix",
   components: {
-    CInput,
-    CSelect,
-    CButton,
-    CFlex,
-    CListItem,
-    CList,
-    CHeading,
-    CGrid,
-    CBox,
-    draggable,
-    ListSelect
+    draggable
   },
   props: {
     user: Object
@@ -150,44 +127,59 @@ export default {
       priority: undefined,
       unassigned: undefined,
       priority1: undefined,
-      priority2: [],
-      priority3: [],
-      priority4: [],
+      priority2: undefined,
+      priority3: undefined,
+      priority4: undefined,
       dragging: false,
       reorderedList: undefined
     };
   },
-  watch: {
-    todos: function() {
-      this.unassigned = this.todos
-        .filter(todo => todo.priority === 0)
-        .sort((a, b) => a.order - b.order);
-      this.priority1 = this.todos.filter(todo => todo.priority === 1);
-      this.priority2 = this.todos.filter(todo => todo.priority === 2);
-      this.priority3 = this.todos.filter(todo => todo.priority === 3);
-      this.priority4 = this.todos.filter(todo => todo.priority === 4);
-    }
-  },
   computed: {
     ...mapState({ todos: state => state.todos.todos }),
+    ...mapGetters("todos", [
+      "unassignedTodos",
+      "priorityOneTodos",
+      "priorityTwoTodos",
+      "priorityThreeTodos",
+      "priorityFourTodos"
+    ]),
     disabled() {
       return !this.todo;
     }
   },
+  watch: {
+    todos: function() {
+      this.unassigned = this.unassignedTodos;
+      this.priority1 = this.priorityOneTodos;
+      this.priority2 = this.priorityTwoTodos;
+      this.priority3 = this.priorityThreeTodos;
+      this.priority4 = this.priorityFourTodos;
+    }
+  },
+  mounted() {
+    this.unassigned = this.unassignedTodos;
+    this.priority1 = this.priorityOneTodos;
+    this.priority2 = this.priorityTwoTodos;
+    this.priority3 = this.priorityThreeTodos;
+    this.priority4 = this.priorityFourTodos;
+  },
   methods: {
     ...mapActions("todos", [
-      "createToDo",
-      "loadToDos",
+      "createTodo",
+      "loadTodos",
       "updatePriority",
       "updateOrder"
     ]),
     async create() {
-      await this.createToDo({
+      await this.createTodo({
         userID: this.user.id,
         name: this.todo,
         note: this.note
       });
       this.resetField();
+    },
+    async mounted() {
+      this.loadTodos();
     },
     resetField() {
       this.todo = undefined;
@@ -199,11 +191,11 @@ export default {
     },
     change($event, list, priority) {
       if ($event.added) {
-        this.addToDo($event, priority);
+        this.addTodo($event, priority);
       }
       if ($event.moved) {
         console.log("moved!");
-        this.reorderToDos(list);
+        this.reorderTodos(list);
       }
     },
     start() {
@@ -212,13 +204,13 @@ export default {
     end() {
       this.dragging = false;
     },
-    addToDo($event, priority) {
+    addTodo($event, priority) {
       this.updatePriority({
-        originalToDo: $event.added.element,
+        originalTodo: $event.added.element,
         newPriority: priority
       });
     },
-    reorderToDos(list) {
+    reorderTodos(list) {
       if (list === "unassigned") {
         this.updateOrder(this.unassigned);
       } else if (list === "priority1") {

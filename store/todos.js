@@ -7,23 +7,40 @@ export const state = () => ({
 });
 
 export const getters = {
-  focusToDo(state) {
+  focusTodo(state) {
     return state.todos
       .filter(todo => todo.priority > 0)
       .sort((a, b) => a.priority - b.priority)
       .shift();
+  },
+  unassignedTodos(state) {
+    return state.todos
+      .filter(todo => todo.priority === 0)
+      .sort((a, b) => a.order - b.order);
+  },
+  priorityOneTodos(state) {
+    return state.todos.filter(todo => todo.priority === 1);
+  },
+  priorityTwoTodos(state) {
+    return state.todos.filter(todo => todo.priority === 2);
+  },
+  priorityThreeTodos(state) {
+    return state.todos.filter(todo => todo.priority === 3);
+  },
+  priorityFourTodos(state) {
+    return state.todos.filter(todo => todo.priority === 4);
   }
 };
 
 export const mutations = {
-  setToDos(state, todos) {
+  setTodos(state, todos) {
     state.todos = todos;
     state.loaded = true;
   }
 };
 
 export const actions = {
-  async createToDo({ dispatch }, { userID, name, note }) {
+  async createTodo({ dispatch }, { userID, name, note }) {
     try {
       const response = await DataStore.save(
         new Todo({
@@ -34,26 +51,24 @@ export const actions = {
           complete: false
         })
       );
-      dispatch("loadToDos", response.userID);
+      dispatch("loadTodos", response.userID);
     } catch (error) {
       console.log(error);
     }
   },
-  async loadToDos({ commit }, userID) {
-    const response = await DataStore.query(Todo, todo =>
-      todo.userID("eq", userID)
-    );
-    commit("setToDos", response);
+  async loadTodos({ commit }) {
+    const response = await DataStore.query(Todo);
+    commit("setTodos", response);
   },
-  async updatePriority({ dispatch }, { originalToDo, newPriority }) {
+  async updatePriority({ dispatch }, { originalTodo, newPriority }) {
     try {
-      console.log(originalToDo);
+      console.log(originalTodo);
       const response = await DataStore.save(
-        Todo.copyOf(originalToDo, todo => {
+        Todo.copyOf(originalTodo, todo => {
           todo.priority = newPriority;
         })
       );
-      dispatch("loadToDos", response.userID);
+      dispatch("loadTodos", response.userID);
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +84,7 @@ export const actions = {
         );
       });
       console.dir("update response", response);
-      //   dispatch("loadToDos", response.userID);
+      //   dispatch("loadTodos", response.userID);
     } catch (error) {
       console.error(error);
     }

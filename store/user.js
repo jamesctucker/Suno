@@ -20,7 +20,7 @@ export const actions = {
       if (!state.loaded) {
         const user = await DataStore.query(User);
         commit("setUser", user[0]);
-        dispatch("todos/loadToDos", user[0].id, { root: true });
+        dispatch("todos/loadTodos", user[0].id, { root: true });
       }
     } catch (error) {
       console.log(error);
