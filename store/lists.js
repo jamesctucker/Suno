@@ -2,8 +2,8 @@ import { DataStore } from "aws-amplify";
 import { List, User } from "../src/models";
 
 export const state = () => ({
-  lists: undefined,
-  currentList: undefined
+  lists: null,
+  currentList: null
 });
 
 export const mutations = {
@@ -16,7 +16,7 @@ export const mutations = {
 };
 
 export const actions = {
-  async loadLists({ commit }, userId) {
+  async loadLists({ commit }) {
     const response = await DataStore.query(List);
     commit("setLists", response);
   },
@@ -29,7 +29,7 @@ export const actions = {
       })
     );
     console.log(response);
-    dispatch("loadLists", response.User.id);
+    dispatch("loadLists");
   },
   async deleteList() {}
 };

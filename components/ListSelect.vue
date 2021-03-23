@@ -2,7 +2,27 @@
   <div class="ListSelect">
     <div class="flex flex-col">
       <div class="flex flex-col">
-        <a href="" v-for="list in lists" :key="list.id">{{ list.name }}</a>
+        <a
+          v-for="list in lists"
+          :key="list.id"
+          class="text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+          @click="setList(list.id)"
+          ><svg
+            class="mr-3 h-6 w-6 text-indigo-300"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+            /></svg
+          >{{ list.name }}</a
+        >
       </div>
 
       <!--  Create new list modal -->
@@ -92,13 +112,12 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "ListSelect",
   data() {
     return {
-      selectedList: undefined,
       listName: undefined,
       isOpen: false
     };
@@ -114,6 +133,7 @@ export default {
   },
   methods: {
     ...mapActions("lists", ["createList"]),
+    ...mapMutations("lists", ["setCurrentList"]),
     open() {
       this.isOpen = true;
     },
@@ -127,6 +147,9 @@ export default {
       });
       this.isOpen = false;
       this.listName = undefined;
+    },
+    setList(listId) {
+      return this.setCurrentList(listId);
     }
   }
 };

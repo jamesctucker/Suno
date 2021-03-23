@@ -213,6 +213,7 @@
                 <nuxt-link
                   to="/matrix"
                   class="text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                  @click.native="setCurrentList(null)"
                 >
                   <!-- Heroicon name: outline/folder -->
                   <svg
@@ -427,7 +428,7 @@
 </template>
 
 <script lang="js">
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 import { Auth, Hub, DataStore }  from 'aws-amplify';
 import ListSelect from "~/components/ListSelect.vue";
 
@@ -476,6 +477,8 @@ export default {
     ...mapActions('auth', ['checkAuthState']),
     ...mapActions('user', ['loadUser']),
     ...mapActions('todos', ['loadTodos']),
+        ...mapMutations("lists", ["setCurrentList"]),
+
     signOut: async () => Auth.signOut(),
     async clearLocalData() {
       await DataStore.clear();
