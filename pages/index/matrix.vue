@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
 
 export default {
@@ -135,7 +135,10 @@ export default {
     };
   },
   computed: {
-    ...mapState({ todos: state => state.todos.todos }),
+    ...mapState({
+      todos: state => state.todos.todos,
+      currentList: state => state.lists.currentList
+    }),
     ...mapGetters("todos", [
       "unassignedTodos",
       "priorityOneTodos",
@@ -154,6 +157,13 @@ export default {
       this.priority2 = this.priorityTwoTodos;
       this.priority3 = this.priorityThreeTodos;
       this.priority4 = this.priorityFourTodos;
+    },
+    currentList: function() {
+      this.unassigned = this.unassignedTodos;
+      this.priority1 = this.priorityOneTodos;
+      this.priority2 = this.priorityTwoTodos;
+      this.priority3 = this.priorityThreeTodos;
+      this.priority4 = this.priorityFourTodos;
     }
   },
   mounted() {
@@ -162,6 +172,7 @@ export default {
     this.priority2 = this.priorityTwoTodos;
     this.priority3 = this.priorityThreeTodos;
     this.priority4 = this.priorityFourTodos;
+    // this.setCurrentList(null);
   },
   methods: {
     ...mapActions("todos", [
@@ -170,6 +181,8 @@ export default {
       "updatePriority",
       "updateOrder"
     ]),
+    ...mapMutations("lists", ["setCurrentList"]),
+
     async create() {
       await this.createTodo({
         userID: this.user.id,

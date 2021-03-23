@@ -1,4 +1,4 @@
-import { DataStore, Predicates } from "aws-amplify";
+import { DataStore } from "aws-amplify";
 import { Todo } from "../src/models";
 
 export const state = () => ({
@@ -13,22 +13,33 @@ export const getters = {
       .sort((a, b) => a.priority - b.priority)
       .shift();
   },
-  unassignedTodos(state) {
+  unassignedTodos(state, getters, rootState) {
     return state.todos
-      .filter(todo => todo.priority === 0)
+      .filter(
+        todo =>
+          todo.priority === 0 && todo.listID === rootState.lists.currentList
+      )
       .sort((a, b) => a.order - b.order);
   },
-  priorityOneTodos(state) {
-    return state.todos.filter(todo => todo.priority === 1);
+  priorityOneTodos(state, getters, rootState) {
+    return state.todos.filter(
+      todo => todo.priority === 1 && todo.listID === rootState.lists.currentList
+    );
   },
-  priorityTwoTodos(state) {
-    return state.todos.filter(todo => todo.priority === 2);
+  priorityTwoTodos(state, getters, rootState) {
+    return state.todos.filter(
+      todo => todo.priority === 2 && todo.listID === rootState.lists.currentList
+    );
   },
-  priorityThreeTodos(state) {
-    return state.todos.filter(todo => todo.priority === 3);
+  priorityThreeTodos(state, getters, rootState) {
+    return state.todos.filter(
+      todo => todo.priority === 3 && todo.listID === rootState.lists.currentList
+    );
   },
-  priorityFourTodos(state) {
-    return state.todos.filter(todo => todo.priority === 4);
+  priorityFourTodos(state, getters, rootState) {
+    return state.todos.filter(
+      todo => todo.priority === 4 && todo.listID === rootState.lists.currentList
+    );
   }
 };
 
@@ -36,11 +47,14 @@ export const mutations = {
   setTodos(state, todos) {
     state.todos = todos;
     state.loaded = true;
+  },
+  setCurrentList(state, list) {
+    state.currentList = list;
   }
 };
 
 export const actions = {
-  async createTodo({ dispatch }, { userID, name, note }) {
+  async createTodo({ dispatch, rootState }, { userID, name, note }) {
     try {
       const response = await DataStore.save(
         new Todo({
@@ -48,7 +62,10 @@ export const actions = {
           name: name,
           note: note,
           priority: 0,
-          complete: false
+          complete: false,
+          listID: rootState.lists.currentList
+            ? rootState.lists.currentList
+            : null
         })
       );
       dispatch("loadTodos", response.userID);
