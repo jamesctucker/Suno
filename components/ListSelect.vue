@@ -1,52 +1,75 @@
 <template>
-  <div class="ListSelect">
-    <div class="flex flex-col">
-      <div class="flex flex-col">
-        <a
-          v-for="list in lists"
-          :key="list.id"
-          class="text-indigo-100 hover:bg-indigo-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-          @click="setList(list.id)"
-          ><svg
-            class="mr-3 h-6 w-6 text-indigo-300"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-            /></svg
-          >{{ list.name }}</a
+  <div class="ListSelect flex flex-col justify-between space-y-1 px-2 h-full">
+    <div class="flex flex-col mt-8">
+      <a
+        v-for="list in lists"
+        :key="list.id"
+        class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+        @click="setList(list.id)"
+      >
+        <svg
+          class="mr-3 h-6 w-6 text-purple-300"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-      </div>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          />
+        </svg>
 
-      <!--  Create new list modal -->
-      <div v-if="isOpen" class="fixed z-10 inset-0 overflow-y-auto">
-        <div
-          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        {{ list.name }}</a
+      >
+    </div>
+
+    <button
+      type="button"
+      class="group flex items-center justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:text-sm"
+      @click="open"
+    >
+      <svg
+        class="mr-3 h-6 w-6 text-purple-300"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        />
+      </svg>
+      create new list
+    </button>
+
+    <!--  Create new list modal -->
+    <div v-if="isOpen" class="fixed z-10 inset-0 overflow-y-auto">
+      <div
+        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span
+          class="hidden sm:inline-block sm:align-middle sm:h-screen"
+          aria-hidden="true"
+          >&#8203;</span
         >
-          <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-          </div>
-          <span
-            class="hidden sm:inline-block sm:align-middle sm:h-screen"
-            aria-hidden="true"
-            >&#8203;</span
-          >
-          <div
-            class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-headline"
-          >
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <!-- <h3
+        <div
+          class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-headline"
+        >
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <!-- <h3
                   class="text-lg leading-6 font-medium text-gray-900"
                   id="modal-headline"
                 >
@@ -59,54 +82,45 @@
                     forever. This action cannot be undone.
                   </p>
                 </div> -->
-                <div>
-                  <label
-                    for="input"
-                    class="block text-sm font-medium text-gray-700"
-                    >Add List</label
-                  >
-                  <div class="mt-3">
-                    <input
-                      v-model="listName"
-                      type="text"
-                      name="input"
-                      id="input"
-                      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Enter a list name"
-                      @keydown.enter="createNewList"
-                    />
-                  </div>
+              <div>
+                <label
+                  for="input"
+                  class="block text-sm font-medium text-gray-700"
+                  >Add List</label
+                >
+                <div class="mt-3">
+                  <input
+                    v-model="listName"
+                    type="text"
+                    name="input"
+                    id="input"
+                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Enter a list name"
+                    @keydown.enter="createNewList"
+                  />
                 </div>
               </div>
             </div>
-            <div class="mt-3 text-center sm:mt-4 sm:ml-4 sm:text-left sm:flex">
-              <button
-                type="button"
-                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-                :disabled="disabled"
-                @click="createNewList"
-              >
-                Create
-              </button>
-              <button
-                type="button"
-                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                @click="close"
-              >
-                Cancel
-              </button>
-            </div>
+          </div>
+          <div class="mt-3 text-center sm:mt-4 sm:ml-4 sm:text-left sm:flex">
+            <button
+              type="button"
+              class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+              :disabled="disabled"
+              @click="createNewList"
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              @click="close"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>
-
-      <button
-        type="button"
-        class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-        @click="open"
-      >
-        new list
-      </button>
     </div>
   </div>
 </template>
@@ -149,7 +163,7 @@ export default {
       this.listName = undefined;
     },
     setList(listId) {
-      return this.setCurrentList(listId);
+      this.setCurrentList(listId);
     }
   }
 };
