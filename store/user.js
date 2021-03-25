@@ -14,14 +14,11 @@ export const mutations = {
 };
 
 export const actions = {
-  async loadUser({ commit, dispatch }, authUser) {
+  async loadUser({ commit, dispatch }) {
     try {
-      console.log(authUser);
       if (!state.loaded) {
         const user = await DataStore.query(User);
         commit("setUser", user[0]);
-        dispatch("todos/loadTodos", user[0].id, { root: true });
-        dispatch("lists/loadLists", user[0].id, { root: true });
       }
     } catch (error) {
       console.log(error);

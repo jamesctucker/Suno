@@ -456,6 +456,14 @@ export default {
       showMenu: false
     }
   },
+  watch: {
+    currentUser: function() {
+      if (this.currentUser) {
+        this.loadTodos()
+        this.loadLists();
+      }
+    }
+  },
   computed: {
     ...mapState({
       authState: state => state.auth.authState,
@@ -486,8 +494,8 @@ export default {
     ...mapActions('auth', ['checkAuthState']),
     ...mapActions('user', ['loadUser']),
     ...mapActions('todos', ['loadTodos']),
-        ...mapMutations("lists", ["setCurrentList"]),
-
+    ...mapActions('lists', ['loadLists']),
+    ...mapMutations("lists", ["setCurrentList"]),
     signOut: async () => Auth.signOut(),
     async clearLocalData() {
       await DataStore.clear();
