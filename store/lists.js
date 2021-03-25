@@ -28,7 +28,6 @@ export const actions = {
         Todos: []
       })
     );
-    console.log(response);
     dispatch("loadLists");
   },
   async deleteList() {}

@@ -6,79 +6,147 @@
     <div class="flex">
       <!-- column 1 -->
       <div class="grid grid-cols-2 gap-4 w-3/4">
-        <div class="col-span-1 w-full h-64 bg-red-400">
+        <div class="col-span-1 w-full h-64 bg-red-400 relative">
           <draggable
-            class="list-group"
+            class="list-group divide-y-2 divide-red-400 divide-solid"
             v-model="priority1"
             group="todos"
             name="one"
             @change="change($event, 'priority1', 1)"
           >
             <div
-              class="list-group-item"
+              class="list-group-item bg-red-500 relative"
+              :id="`${element.id}`"
               v-for="element in priority1"
               :key="element.id"
+              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              {{ element.name }}
+              <p class="text-white">{{ element.name }}</p>
+              <todo-menu
+                v-show="showTodoMenu && element.id === menuToShow"
+                :x-position="clickX"
+                :y-position="clickY"
+                :todo="element"
+              />
+              <div
+                v-show="showTodoMenu"
+                class="outside"
+                @click="hideTodoMenu"
+              ></div>
             </div>
           </draggable>
+          <p class="absolute bottom-0 left-0 h-16 p-4 text-red-200">
+            urgent and important
+          </p>
         </div>
-        <div class="col-span-1 w-full h-64 bg-yellow-500">
+        <div class="col-span-1 w-full h-64 bg-yellow-500 relative">
           <draggable
-            class="list-group"
+            class="list-group divide-y-2 divide-yellow-500 divide-solid"
             v-model="priority2"
             group="todos"
             @change="change($event, 'priority2', 2)"
           >
             <div
-              class="list-group-item"
+              class="list-group-item bg-yellow-600 relative"
+              :id="`${element.id}`"
               v-for="element in priority2"
               :key="element.id"
+              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              {{ element.name }}
+              <p class="text-white">{{ element.name }}</p>
+              <todo-menu
+                v-show="showTodoMenu && element.id === menuToShow"
+                :x-position="clickX"
+                :y-position="clickY"
+                :todo="element"
+              />
+              <div
+                v-show="showTodoMenu"
+                class="outside"
+                @click="hideTodoMenu"
+              ></div>
             </div>
           </draggable>
+          <p class="absolute bottom-0 left-0 h-16 p-4 text-yellow-100">
+            important but not urgent
+          </p>
         </div>
-        <div class="col-span-1 w-full h-64 bg-yellow-300">
+        <div class="col-span-1 w-full h-64 bg-yellow-200 relative">
           <draggable
-            class="list-group"
+            class="list-group divide-y-2 divide-yellow-200 divide-solid"
             v-model="priority3"
             group="todos"
             @change="change($event, 'priority3', 3)"
           >
             <div
-              class="list-group-item"
+              class="list-group-item bg-yellow-300 relative"
+              :id="`${element.id}`"
               v-for="element in priority3"
               :key="element.id"
+              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              {{ element.name }}
+              <p class="text-white">{{ element.name }}</p>
+              <todo-menu
+                v-show="showTodoMenu && element.id === menuToShow"
+                :x-position="clickX"
+                :y-position="clickY"
+                :todo="element"
+              />
+              <div
+                v-show="showTodoMenu"
+                class="outside"
+                @click="hideTodoMenu"
+              ></div>
             </div>
           </draggable>
+          <p class="absolute bottom-0 left-0 h-16 p-4 text-yellow-500">
+            urgent but not important
+          </p>
         </div>
-        <div class="col-span-1 w-full h-64 bg-green-400">
+        <div class="col-span-1 w-full h-64 bg-green-400 relative">
           <draggable
-            class="list-group"
+            class="list-group divide-y-2 divide-green-400 divide-solid"
             v-model="priority4"
             group="todos"
             @change="change($event, 'priority4', 4)"
           >
             <div
-              class="list-group-item"
+              class="list-group-item bg-green-500 relative"
+              :id="`${element.id}`"
               v-for="element in priority4"
               :key="element.id"
+              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              {{ element.name }}
+              <p class="text-white">{{ element.name }}</p>
+              <todo-menu
+                v-show="showTodoMenu && element.id === menuToShow"
+                :x-position="clickX"
+                :y-position="clickY"
+                :todo="element"
+              />
+              <div
+                v-show="showTodoMenu"
+                class="outside"
+                @click="hideTodoMenu"
+              ></div>
             </div>
           </draggable>
+          <p class="absolute bottom-0 left-0 h-16 p-4 text-green-100">
+            not important or urgent
+          </p>
         </div>
       </div>
       <!-- column 2 -->
       <div class="flex flex-col justify-start items-left ml-4 w-1/4">
         <div class="flex flex-row items-center mr-4 ">
+          <label for="todo" class="sr-only">Email</label>
           <input
             v-model="todo"
             type="text"
-            placeholder="todo..."
+            name="todo"
+            id="todo"
+            class="shadow-sm focus:ring-indigo-500 focus:border-purple-500 block w-full sm:text-sm border-gray-300 rounded-md"
+            placeholder="Enter a todo"
             @keyup.enter="create"
           />
         </div>
@@ -92,15 +160,29 @@
             @end="end"
           >
             <div
-              class="list-group-item"
+              class="list-group-item relative"
+              :id="`${element.id}`"
               v-for="element in unassigned"
               :key="element.todo"
+              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              <input type="checkbox" @change="handleChange(element)" />
+              <!-- <input type="checkbox" @change="handleChange(element)" /> -->
               <p v-if="isComplete">
                 <del>{{ element.name }}</del>
               </p>
               <p v-else>{{ element.name }}</p>
+
+              <todo-menu
+                v-show="showTodoMenu && element.id === menuToShow"
+                :x-position="clickX"
+                :y-position="clickY"
+                :todo="element"
+              />
+              <div
+                v-show="showTodoMenu"
+                class="outside"
+                @click="hideTodoMenu"
+              ></div>
             </div>
           </draggable>
         </div>
@@ -112,6 +194,7 @@
 <script>
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
+import TodoMenu from "~/components/TodoMenu.vue";
 
 export default {
   key(route) {
@@ -119,7 +202,8 @@ export default {
   },
   name: "Matrix",
   components: {
-    draggable
+    draggable,
+    TodoMenu
   },
   props: {
     user: Object
@@ -136,7 +220,11 @@ export default {
       priority4: undefined,
       dragging: false,
       reorderedList: undefined,
-      isComplete: undefined
+      isComplete: undefined,
+      showTodoMenu: false,
+      clickX: undefined,
+      clickY: undefined,
+      menuToShow: undefined
     };
   },
   computed: {
@@ -249,6 +337,23 @@ export default {
         await this.toggleComplete(todo);
         this.isComplete = !this.isComplete;
       }, 3000);
+    },
+    openTodoMenu($event, id) {
+      console.log("todo menu!", id);
+      this.menuToShow = id;
+
+      let element = document.getElementById(id);
+      const rect = element.getBoundingClientRect();
+      this.clickX = $event.clientX - rect.left;
+      this.clickY = $event.clientY - rect.top;
+
+      this.showTodoMenu = true;
+    },
+    hideTodoMenu() {
+      this.showTodoMenu = false;
+      this.menuToShow = undefined;
+      this.clickX = undefined;
+      this.clickY = undefined;
     }
   }
 };

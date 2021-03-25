@@ -156,10 +156,11 @@
           <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
             <div class="flex items-center flex-shrink-0 px-4">
               <img
-                class="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-logo-indigo-300-mark-white-text.svg"
-                alt="Workflow"
+                class="h-12 w-auto"
+                src="~/assets/logo/logo.svg"
+                alt="I Need A Name"
               />
+              <h1></h1>
             </div>
             <div class="mt-5 flex-1 flex flex-col justify-between">
               <nav class="px-2 space-y-1">
@@ -414,9 +415,9 @@
           tabindex="0"
         >
           <div class="py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <!-- <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
-            </div>
+            </div> -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <div class="flex flex-col justify-center items-center mt-8">
                 <!-- <p v-show="!isOnline">

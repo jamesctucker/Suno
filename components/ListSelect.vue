@@ -32,7 +32,7 @@
       @click="open"
     >
       <svg
-        class="mr-3 h-6 w-6 text-purple-300"
+        class="mr-1 h-5 w-5 text-white"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
