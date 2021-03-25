@@ -3,9 +3,11 @@
     <div class="flex flex-col mt-8">
       <a
         v-for="list in lists"
+        :id="`${list.id}`"
         :key="list.id"
-        class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+        class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md relative"
         @click="setList(list.id)"
+        @contextmenu.prevent="openListMenu($event, list.id)"
       >
         <svg
           class="mr-3 h-6 w-6 text-purple-300"
@@ -21,9 +23,21 @@
             d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
           />
         </svg>
+        {{ list.name }}
 
-        {{ list.name }}</a
-      >
+        <list-menu
+          v-show="listMenuIsOpen && list.id === menuToShow"
+          :x-position="clickX"
+          :y-position="clickY"
+          :list="list"
+          @closed="closeListMenu"
+        />
+        <div
+          v-show="listMenuIsOpen"
+          class="outside z-20 bg-gray-300 bg-opacity-20"
+          @click="closeListMenu"
+        ></div>
+      </a>
     </div>
 
     <button
@@ -69,19 +83,6 @@
         >
           <div class="sm:flex sm:items-start">
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-              <!-- <h3
-                  class="text-lg leading-6 font-medium text-gray-900"
-                  id="modal-headline"
-                >
-                  Deactivate account
-                </h3>
-                <div class="mt-2">
-                  <p class="text-sm text-gray-500">
-                    Are you sure you want to deactivate your account? All of
-                    your data will be permanently removed from our servers
-                    forever. This action cannot be undone.
-                  </p>
-                </div> -->
               <div>
                 <label
                   for="input"
@@ -127,13 +128,22 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+import ListMenu from "./ListMenu.vue";
 
 export default {
+  components: { ListMenu },
   name: "ListSelect",
+  components: {
+    ListMenu
+  },
   data() {
     return {
       listName: undefined,
-      isOpen: false
+      isOpen: false,
+      menuToShow: undefined,
+      clickY: undefined,
+      clickX: undefined,
+      listMenuIsOpen: false
     };
   },
   computed: {
@@ -164,6 +174,22 @@ export default {
     },
     setList(listId) {
       this.setCurrentList(listId);
+    },
+    openListMenu($event, id) {
+      this.menuToShow = id;
+
+      let element = document.getElementById(id);
+      const rect = element.getBoundingClientRect();
+      this.clickX = $event.clientX - rect.left;
+      this.clickY = $event.clientY - rect.top;
+
+      this.listMenuIsOpen = true;
+    },
+    closeListMenu() {
+      this.listMenuIsOpen = false;
+      this.menuToShow = undefined;
+      this.clickX = undefined;
+      this.clickY = undefined;
     }
   }
 };

@@ -1,20 +1,9 @@
 <template>
   <div
     :class="
-      `TodoMenu absolute top-${yPosition} left-${xPosition} text-left z-10`
+      `ListMenu absolute top-${yPosition} left-${xPosition} text-left z-40`
     "
   >
-    <!-- This example requires Tailwind CSS v2.0+ -->
-    <!--
-    Dropdown menu, show/hide based on menu state.
-
-    Entering: "transition ease-out duration-100"
-      From: "transform opacity-0 scale-95"
-      To: "transform opacity-100 scale-100"
-    Leaving: "transition ease-in duration-75"
-      From: "transform opacity-100 scale-100"
-      To: "transform opacity-0 scale-95"
-  -->
     <div
       class="mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
       role="menu"
@@ -27,7 +16,6 @@
           class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <!-- Heroicon name: solid/arrow-circle-right -->
           <svg
             class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
             xmlns="http://www.w3.org/2000/svg"
@@ -75,27 +63,20 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  name: "TodoMenu",
+  name: "ListMenu",
   props: {
     xPosition: Number,
     yPosition: Number,
-    todo: Object
+    list: Object
   },
   methods: {
-    ...mapActions("todo", ["deleteTodo"]),
-    handleDelete() {
-      this.deleteToDo(this.todo);
+    ...mapActions("lists", ["deleteList"]),
+    ...mapActions("todos", ["batchDeleteTodos"]),
+    async handleDelete() {
+      await this.deleteList(this.list);
+      this.batchDeleteTodos(this.list.id);
+      this.$emit("closed", true);
     }
   }
 };
 </script>
-
-<style>
-.outside {
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-}
-</style>

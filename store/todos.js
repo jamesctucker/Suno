@@ -124,7 +124,6 @@ export const actions = {
           })
         );
       });
-      //   console.dir("update response", response);
       dispatch("loadTodos");
     } catch (error) {
       console.error(error);
@@ -141,5 +140,11 @@ export const actions = {
   async deleteTodo({ dispatch }, todo) {
     await DataStore.delete(todo);
     dispatch("loadTodos");
+  },
+  async batchDeleteTodos({ dispatch }, listId) {
+    const response = await DataStore.delete(Todo, todo =>
+      todo.listID("eq", listId)
+    );
+    console.log("batch deleting todos", response);
   }
 };

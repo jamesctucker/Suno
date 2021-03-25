@@ -5,7 +5,7 @@
     </h1> -->
     <div class="flex">
       <!-- column 1 -->
-      <div class="grid grid-cols-2 gap-4 w-3/4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-1/2 lg:w-3/4 ">
         <div class="col-span-1 w-full h-64 bg-red-400 relative rounded-md">
           <draggable
             class="list-group divide-y-2 divide-red-400 divide-solid"
@@ -26,7 +26,7 @@
                 class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
                 @change="handleChange(element)"
               />
-              <p class="ml-2 text-sm font-medium text-white">
+              <p class="ml-2 text-sm font-medium text-white truncate">
                 {{ element.name }}
               </p>
               <todo-menu
@@ -65,7 +65,7 @@
                 class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
                 @change="handleChange(element)"
               />
-              <p class="ml-2 text-sm font-medium text-white">
+              <p class="ml-2 text-sm font-medium text-white truncated">
                 {{ element.name }}
               </p>
               <todo-menu
@@ -104,7 +104,7 @@
                 class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
                 @change="handleChange(element)"
               />
-              <p class="ml-2 text-sm font-medium text-white">
+              <p class="ml-2 text-sm font-medium text-white truncated">
                 {{ element.name }}
               </p>
               <todo-menu
@@ -165,7 +165,7 @@
         </div>
       </div>
       <!-- column 2 -->
-      <div class="flex flex-col justify-start items-left ml-4 w-1/4">
+      <div class="flex flex-col justify-start items-left ml-4 w-1/2 lg:w-1/4">
         <div class="flex flex-row items-center mr-4 ">
           <label for="todo" class="sr-only">Email</label>
           <input
@@ -193,13 +193,14 @@
               v-for="element in unassigned"
               :key="element.todo"
               @contextmenu.prevent="openTodoMenu($event, element.id)"
+              @dblclick="openEditModal"
             >
               <input
                 type="checkbox"
                 class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
                 @change="handleChange(element)"
               />
-              <p class="ml-2 text-sm font-medium text-gray-700">
+              <p class="ml-2 text-sm font-medium text-gray-700 truncate">
                 {{ element.name }}
               </p>
               <todo-menu
@@ -208,6 +209,7 @@
                 :y-position="clickY"
                 :todo="element"
               />
+              <edit-modal :is-open="showEditModal" :todo="element" />
               <div
                 v-show="showTodoMenu"
                 class="outside"
@@ -224,7 +226,8 @@
 <script>
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
-import TodoMenu from "~/components/TodoMenu.vue";
+import TodoMenu from "~/components/todos/TodoMenu.vue";
+import EditModal from "~/components/todos/EditModal.vue";
 
 export default {
   key(route) {
@@ -233,7 +236,8 @@ export default {
   name: "Matrix",
   components: {
     draggable,
-    TodoMenu
+    TodoMenu,
+    EditModal
   },
   props: {
     user: Object
@@ -254,7 +258,8 @@ export default {
       showTodoMenu: false,
       clickX: undefined,
       clickY: undefined,
-      menuToShow: undefined
+      menuToShow: undefined,
+      showEditModal: false
     };
   },
   computed: {
@@ -385,6 +390,9 @@ export default {
       this.menuToShow = undefined;
       this.clickX = undefined;
       this.clickY = undefined;
+    },
+    openEditModal() {
+      this.showEditModal = true;
     }
   }
 };

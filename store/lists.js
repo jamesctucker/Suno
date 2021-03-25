@@ -21,7 +21,7 @@ export const actions = {
     commit("setLists", response);
   },
   async createList({ dispatch }, { name, user }) {
-    const response = await DataStore.save(
+    await DataStore.save(
       new List({
         name: name,
         User: user,
@@ -30,5 +30,8 @@ export const actions = {
     );
     dispatch("loadLists");
   },
-  async deleteList() {}
+  async deleteList({ dispatch }, list) {
+    await DataStore.delete(list);
+    dispatch("loadLists");
+  }
 };

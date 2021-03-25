@@ -439,7 +439,7 @@
 <script lang="js">
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 import { Auth, Hub, DataStore }  from 'aws-amplify';
-import ListSelect from "~/components/ListSelect.vue";
+import ListSelect from "~/components/lists/ListSelect.vue";
 
 export default {
   key(route) {
