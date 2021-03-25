@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { deleteTodo } from "~/src/graphql/mutations";
+import { deleteTodo, updateTodo } from "~/src/graphql/mutations";
 import { Todo } from "../src/models";
 
 export const state = () => ({
@@ -71,7 +71,7 @@ export const mutations = {
 export const actions = {
   async createTodo({ dispatch, rootState }, { userID, name, note }) {
     try {
-      const response = await DataStore.save(
+      await DataStore.save(
         new Todo({
           userID: userID,
           name: name,
@@ -81,7 +81,7 @@ export const actions = {
           listID: rootState.lists.currentList
         })
       );
-      dispatch("loadTodos", response.userID);
+      dispatch("loadTodos");
     } catch (error) {
       console.log(error);
     }
@@ -90,46 +90,56 @@ export const actions = {
     const response = await DataStore.query(Todo);
     commit("setTodos", response);
   },
+  async updateTodo(_, { originalTodo, newParams }) {
+    try {
+      const response = await DataStore.save(
+        Todo.copyOf(originalTodo, todo => {
+          todo.name = newParams.name;
+          todo.note = newParams.note;
+        })
+      );
+      console.dir(response);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async updatePriority({ dispatch }, { originalTodo, newPriority }) {
     try {
-      console.log(originalTodo);
-      const response = await DataStore.save(
+      await DataStore.save(
         Todo.copyOf(originalTodo, todo => {
           todo.priority = newPriority;
         })
       );
-      dispatch("loadTodos", response.userID);
+      dispatch("loadTodos");
     } catch (error) {
       console.log(error);
     }
   },
   updateOrder({ dispatch }, originals) {
     try {
-      console.dir(originals);
-      const response = originals.map((o, index) => {
+      originals.map((o, index) => {
         DataStore.save(
           Todo.copyOf(o, updated => {
             updated.order = index;
           })
         );
       });
-      console.dir("update response", response);
-      //   dispatch("loadTodos", response.userID);
+      //   console.dir("update response", response);
+      dispatch("loadTodos");
     } catch (error) {
       console.error(error);
     }
   },
   async toggleComplete({ dispatch }, original) {
-    const response = await DataStore.save(
+    await DataStore.save(
       Todo.copyOf(original, updated => {
         updated.complete = !original.complete;
       })
     );
-    console.log(response);
     dispatch("loadTodos");
   },
   async deleteTodo({ dispatch }, todo) {
-    const response = await DataStore.delete(todo);
-    console.log(response);
+    await DataStore.delete(todo);
+    dispatch("loadTodos");
   }
 };
