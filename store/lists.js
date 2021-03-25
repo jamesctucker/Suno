@@ -1,5 +1,5 @@
 import { DataStore } from "aws-amplify";
-import { List, User } from "../src/models";
+import { List } from "../src/models";
 
 export const state = () => ({
   lists: null,

@@ -27,28 +27,6 @@
           class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <!-- Heroicon name: solid/archive -->
-          <svg
-            class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-            <path
-              fill-rule="evenodd"
-              d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          Archive
-        </a>
-        <a
-          href="#"
-          class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          role="menuitem"
-        >
           <!-- Heroicon name: solid/arrow-circle-right -->
           <svg
             class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
@@ -71,48 +49,7 @@
           href="#"
           class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
-        >
-          <!-- Heroicon name: solid/user-add -->
-          <svg
-            class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
-            />
-          </svg>
-          Share
-        </a>
-        <a
-          href="#"
-          class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          role="menuitem"
-        >
-          <!-- Heroicon name: solid/heart -->
-          <svg
-            class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          Add to favorites
-        </a>
-      </div>
-      <div class="py-1" role="none">
-        <a
-          href="#"
-          class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          role="menuitem"
+          @click.prevent="handleDelete"
         >
           <!-- Heroicon name: solid/trash -->
           <svg
@@ -136,12 +73,19 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "TodoMenu",
   props: {
     xPosition: Number,
     yPosition: Number,
     todo: Object
+  },
+  methods: {
+    ...mapActions("todo", ["deleteTodo"]),
+    handleDelete() {
+      this.deleteToDo(this.todo);
+    }
   }
 };
 </script>

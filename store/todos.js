@@ -1,4 +1,5 @@
 import { DataStore } from "aws-amplify";
+import { deleteTodo } from "~/src/graphql/mutations";
 import { Todo } from "../src/models";
 
 export const state = () => ({
@@ -25,22 +26,34 @@ export const getters = {
   },
   priorityOneTodos(state, getters, rootState) {
     return state.todos.filter(
-      todo => todo.priority === 1 && todo.listID === rootState.lists.currentList
+      todo =>
+        todo.priority === 1 &&
+        !todo.complete &&
+        todo.listID === rootState.lists.currentList
     );
   },
   priorityTwoTodos(state, getters, rootState) {
     return state.todos.filter(
-      todo => todo.priority === 2 && todo.listID === rootState.lists.currentList
+      todo =>
+        todo.priority === 2 &&
+        !todo.complete &&
+        todo.listID === rootState.lists.currentList
     );
   },
   priorityThreeTodos(state, getters, rootState) {
     return state.todos.filter(
-      todo => todo.priority === 3 && todo.listID === rootState.lists.currentList
+      todo =>
+        todo.priority === 3 &&
+        !todo.complete &&
+        todo.listID === rootState.lists.currentList
     );
   },
   priorityFourTodos(state, getters, rootState) {
     return state.todos.filter(
-      todo => todo.priority === 4 && todo.listID === rootState.lists.currentList
+      todo =>
+        todo.priority === 4 &&
+        !todo.complete &&
+        todo.listID === rootState.lists.currentList
     );
   }
 };
@@ -114,5 +127,9 @@ export const actions = {
     );
     console.log(response);
     dispatch("loadTodos");
+  },
+  async deleteTodo({ dispatch }, todo) {
+    const response = await DataStore.delete(todo);
+    console.log(response);
   }
 };
