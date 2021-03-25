@@ -294,9 +294,6 @@ export default {
       this.priority4 = this.priorityFourTodos;
     }
   },
-  mounted() {
-    // this.setCurrentList(null);
-  },
   async fetch() {
     await this.loadTodos();
     this.unassigned = this.unassignedTodos;
@@ -315,7 +312,6 @@ export default {
       "deleteTodo"
     ]),
     ...mapMutations("lists", ["setCurrentList"]),
-
     async create() {
       await this.createTodo({
         userID: this.user.id,
@@ -329,15 +325,11 @@ export default {
       this.note = undefined;
       this.priority = undefined;
     },
-    log: function(evt) {
-      console.log(evt);
-    },
     change($event, list, priority) {
       if ($event.added) {
         this.addTodo($event, priority);
       }
       if ($event.moved) {
-        console.log("moved!");
         this.reorderTodos(list);
       }
     },
@@ -367,7 +359,6 @@ export default {
       }
     },
     handleChange(todo) {
-      console.log(todo);
       this.isComplete = !this.isComplete;
       setTimeout(async () => {
         await this.toggleComplete(todo);
@@ -375,7 +366,6 @@ export default {
       }, 2000);
     },
     openTodoMenu($event, id) {
-      console.log("todo menu!", id);
       this.menuToShow = id;
 
       let element = document.getElementById(id);

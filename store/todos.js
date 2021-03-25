@@ -79,6 +79,8 @@ export const actions = {
           priority: 0,
           complete: false,
           listID: rootState.lists.currentList
+            ? rootState.lists.currentList
+            : "default"
         })
       );
       dispatch("loadTodos");

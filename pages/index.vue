@@ -216,7 +216,7 @@
                 <nuxt-link
                   to="/matrix"
                   class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                  @click.native="setCurrentList(null)"
+                  @click.native="setCurrentList('default')"
                 >
                   <svg
                     class="mr-3 h-6 w-6 text-purple-300"
