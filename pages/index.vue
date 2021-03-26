@@ -419,13 +419,17 @@
               <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
             </div> -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <div class="flex flex-col justify-center items-center mt-8">
+              <div class="flex flex-col justify-center items-start mt-8">
                 <!-- <p v-show="!isOnline">
                   You are offline
                 </p>
                 <p v-show="isSynced">
                   Data synced!
                 </p> -->
+                <div v-if="todos && this.$route.name === 'index'" class="w-1/3">
+                  <todo-input />
+                  <todo-list class="mx-4 mt-4" :todos="defaultTodos" />
+                </div>
                 <NuxtChild :user="currentUser" :todos="todos" />
               </div>
             </div>
@@ -440,6 +444,8 @@
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 import { Auth, Hub, DataStore }  from 'aws-amplify';
 import ListSelect from "~/components/lists/ListSelect.vue";
+import TodoList from "~/components/todos/TodoList.vue";
+import TodoInput from "~/components/todos/TodoInput.vue";
 
 export default {
   key(route) {
@@ -447,7 +453,9 @@ export default {
   },
   name: 'App',
   components: {
-    ListSelect
+    ListSelect,
+    TodoList,
+    TodoInput
   },
   data() {
     return {
@@ -472,6 +480,7 @@ export default {
       todos: state => state.todos.todos
     }),
     ...mapGetters('auth', ['isSignedIn']),
+    ...mapGetters('todos', ['defaultTodos'])
   },
   created() {
     this.checkAuthState();
@@ -485,7 +494,8 @@ export default {
       if (data.payload.data?.isDeltaSync) {
        this.isSynced = data.payload.data.isDeltaSync
       }
-    })
+    }),
+    this.setCurrentList('default');
   },
   beforeDestroy() {
     return this.checkAuthState();

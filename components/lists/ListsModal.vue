@@ -1,6 +1,6 @@
 <template>
-  <div class="EditModal">
-    <div v-if="isOpen" class="fixed z-10 inset-0 overflow-y-auto">
+  <div v-if="showModal" class="ListsModal">
+    <div class="fixed z-10 inset-0 overflow-y-auto">
       <div
         class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
       >
@@ -38,34 +38,20 @@
                 <label
                   for="input"
                   class="block text-sm font-medium text-gray-700"
-                  >Edit Todo</label
+                  >Move to lists</label
                 >
                 <div class="mt-3">
-                  <input
-                    v-model="name"
-                    type="text"
-                    name="name-input"
-                    :id="todo.id"
-                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    :placeholder="todo.name"
-                    @keydown.enter="handleUpdateTodo"
-                  />
+                  <a
+                    v-for="list in lists"
+                    :key="list.id"
+                    @click="moveToList(list.id)"
+                    >{{ list.name }}</a
+                  >
                 </div>
-              </div>
-              <div class="mt-3">
-                <textarea
-                  v-model="note"
-                  name="note-input"
-                  :id="todo.id"
-                  class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                  placeholder="Notes"
-                  rows="3"
-                  @keydown.enter="handleUpdateTodo"
-                />
               </div>
             </div>
           </div>
-          <div class="mt-3 text-center sm:mt-4 sm:ml-4 sm:text-left sm:flex">
+          <!-- <div class="mt-3 text-center sm:mt-4 sm:ml-4 sm:text-left sm:flex">
             <button
               type="button"
               class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
@@ -73,7 +59,7 @@
             >
               Save
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -81,38 +67,28 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { mixin as clickaway } from "vue-clickaway";
 
 export default {
-  name: "EditModal",
+  name: "ListsModal",
   mixins: [clickaway],
   props: {
-    isOpen: Boolean,
+    showModal: Boolean,
     todo: Object
   },
-  data() {
-    return {
-      name: undefined,
-      note: undefined
-    };
-  },
-  mounted() {
-    this.name = this.todo.name;
-    this.note = this.todo.note;
+  computed: {
+    ...mapState({
+      lists: state => state.lists.lists
+    })
   },
   methods: {
-    ...mapActions("todos", ["updateTodo"]),
-    async handleUpdateTodo() {
-      let newParams = {
-        name: this.name,
-        note: this.note
-      };
-      await this.updateTodo({ originalTodo: this.todo, newParams: newParams });
-      this.close();
-    },
+    ...mapActions("todos", ["updateList"]),
     close(event) {
       this.$emit("closed", event);
+    },
+    moveToList(listId) {
+      this.updateList({ originalTodo: this.todo, listId: listId });
     }
   }
 };

@@ -15,31 +15,12 @@
             @change="change($event, 'priority1', 1)"
           >
             <div
-              class="list-group-item bg-red-500 relative flex items-center h-5"
+              class="list-group-item bg-red-500 relative flex items-center h-5 p-4"
               :id="`${element.id}`"
               v-for="element in priority1"
               :key="element.id"
-              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              <input
-                type="checkbox"
-                class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
-                @change="handleChange(element)"
-              />
-              <p class="ml-2 text-sm font-medium text-white truncate">
-                {{ element.name }}
-              </p>
-              <todo-menu
-                v-show="showTodoMenu && element.id === menuToShow"
-                :x-position="clickX"
-                :y-position="clickY"
-                :todo="element"
-              />
-              <div
-                v-show="showTodoMenu"
-                class="outside"
-                @click="hideTodoMenu"
-              ></div>
+              <todo :todo="element" />
             </div>
           </draggable>
           <p class="absolute bottom-0 left-0 h-16 p-4 text-red-200">
@@ -54,31 +35,12 @@
             @change="change($event, 'priority2', 2)"
           >
             <div
-              class="list-group-item bg-yellow-600 relative flex items-center h-5"
+              class="list-group-item bg-yellow-600 relative flex items-center h-5 p-4"
               :id="`${element.id}`"
               v-for="element in priority2"
               :key="element.id"
-              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              <input
-                type="checkbox"
-                class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
-                @change="handleChange(element)"
-              />
-              <p class="ml-2 text-sm font-medium text-white truncated">
-                {{ element.name }}
-              </p>
-              <todo-menu
-                v-show="showTodoMenu && element.id === menuToShow"
-                :x-position="clickX"
-                :y-position="clickY"
-                :todo="element"
-              />
-              <div
-                v-show="showTodoMenu"
-                class="outside"
-                @click="hideTodoMenu"
-              ></div>
+              <todo :todo="element" />
             </div>
           </draggable>
           <p class="absolute bottom-0 left-0 h-16 p-4 text-yellow-100">
@@ -93,31 +55,12 @@
             @change="change($event, 'priority3', 3)"
           >
             <div
-              class="list-group-item bg-yellow-300 relativ flex items-center h-5"
+              class="list-group-item bg-yellow-300 relativ flex items-center h-5 p-4"
               :id="`${element.id}`"
               v-for="element in priority3"
               :key="element.id"
-              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              <input
-                type="checkbox"
-                class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
-                @change="handleChange(element)"
-              />
-              <p class="ml-2 text-sm font-medium text-white truncated">
-                {{ element.name }}
-              </p>
-              <todo-menu
-                v-show="showTodoMenu && element.id === menuToShow"
-                :x-position="clickX"
-                :y-position="clickY"
-                :todo="element"
-              />
-              <div
-                v-show="showTodoMenu"
-                class="outside"
-                @click="hideTodoMenu"
-              ></div>
+              <todo :todo="element" />
             </div>
           </draggable>
           <p class="absolute bottom-0 left-0 h-16 p-4 text-yellow-500">
@@ -132,31 +75,12 @@
             @change="change($event, 'priority4', 4)"
           >
             <div
-              class="list-group-item bg-green-500 relative flex items-center h-5"
+              class="list-group-item bg-green-500 relative flex items-center h-5 p-4"
               :id="`${element.id}`"
               v-for="element in priority4"
               :key="element.id"
-              @contextmenu.prevent="openTodoMenu($event, element.id)"
             >
-              <input
-                type="checkbox"
-                class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
-                @change="handleChange(element)"
-              />
-              <p class="ml-2 text-sm font-medium text-white">
-                {{ element.name }}
-              </p>
-              <todo-menu
-                v-show="showTodoMenu && element.id === menuToShow"
-                :x-position="clickX"
-                :y-position="clickY"
-                :todo="element"
-              />
-              <div
-                v-show="showTodoMenu"
-                class="outside"
-                @click="hideTodoMenu"
-              ></div>
+              <todo :todo="element" />
             </div>
           </draggable>
           <p class="absolute bottom-0 left-0 h-16 p-4 text-green-100">
@@ -166,21 +90,10 @@
       </div>
       <!-- column 2 -->
       <div class="flex flex-col justify-start items-left ml-4 w-1/2 lg:w-1/4">
-        <div class="flex flex-row items-center mr-4 ">
-          <label for="todo" class="sr-only">Email</label>
-          <input
-            v-model="todo"
-            type="text"
-            name="todo"
-            id="todo"
-            class="shadow-sm focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            placeholder="Enter a todo"
-            @keyup.enter="create"
-          />
-        </div>
+        <todo-input :user="user" />
         <div class="flex">
           <draggable
-            class="list-group mt-4"
+            class="list-group mt-4 w-full"
             v-model="unassigned"
             group="todos"
             @change="change($event, 'unassigned', 0)"
@@ -188,33 +101,12 @@
             @end="end"
           >
             <div
-              class="list-group-item relative flex items-center h-5"
+              class="list-group-item relative flex items-center h-5 ml-2 mb-2"
               :id="`${element.id}`"
               v-for="element in unassigned"
               :key="element.todo"
-              @contextmenu.prevent="openTodoMenu($event, element.id)"
-              @dblclick="openEditModal"
             >
-              <input
-                type="checkbox"
-                class="focus:ring-purple-500 h-5 w-5 text-purple-600 border-gray-300 rounded-full"
-                @change="handleChange(element)"
-              />
-              <p class="ml-2 text-sm font-medium text-gray-700 truncate">
-                {{ element.name }}
-              </p>
-              <todo-menu
-                v-show="showTodoMenu && element.id === menuToShow"
-                :x-position="clickX"
-                :y-position="clickY"
-                :todo="element"
-              />
-              <edit-modal :is-open="showEditModal" :todo="element" />
-              <div
-                v-show="showTodoMenu"
-                class="outside"
-                @click="hideTodoMenu"
-              ></div>
+              <todo :todo="element" />
             </div>
           </draggable>
         </div>
@@ -226,27 +118,26 @@
 <script>
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
-import TodoMenu from "~/components/todos/TodoMenu.vue";
-import EditModal from "~/components/todos/EditModal.vue";
+import { mixin as clickaway } from "vue-clickaway";
+import TodoInput from "~/components/todos/TodoInput.vue";
+import Todo from "~/components/todos/Todo.vue";
 
 export default {
   key(route) {
     return route.fullPath;
   },
   name: "Matrix",
+  mixins: [clickaway],
   components: {
     draggable,
-    TodoMenu,
-    EditModal
+    TodoInput,
+    Todo
   },
   props: {
     user: Object
   },
   data() {
     return {
-      todo: undefined,
-      note: undefined,
-      priority: undefined,
       unassigned: undefined,
       priority1: undefined,
       priority2: undefined,
@@ -254,12 +145,7 @@ export default {
       priority4: undefined,
       dragging: false,
       reorderedList: undefined,
-      isComplete: undefined,
-      showTodoMenu: false,
-      clickX: undefined,
-      clickY: undefined,
-      menuToShow: undefined,
-      showEditModal: false
+      isComplete: undefined
     };
   },
   computed: {
@@ -273,10 +159,7 @@ export default {
       "priorityTwoTodos",
       "priorityThreeTodos",
       "priorityFourTodos"
-    ]),
-    disabled() {
-      return !this.todo;
-    }
+    ])
   },
   watch: {
     todos: function() {
@@ -304,7 +187,6 @@ export default {
   },
   methods: {
     ...mapActions("todos", [
-      "createTodo",
       "loadTodos",
       "updatePriority",
       "updateOrder",
@@ -312,19 +194,6 @@ export default {
       "deleteTodo"
     ]),
     ...mapMutations("lists", ["setCurrentList"]),
-    async create() {
-      await this.createTodo({
-        userID: this.user.id,
-        name: this.todo,
-        note: this.note
-      });
-      this.resetField();
-    },
-    resetField() {
-      this.todo = undefined;
-      this.note = undefined;
-      this.priority = undefined;
-    },
     change($event, list, priority) {
       if ($event.added) {
         this.addTodo($event, priority);
@@ -357,32 +226,6 @@ export default {
       } else {
         this.updateOrder(this.priority4);
       }
-    },
-    handleChange(todo) {
-      this.isComplete = !this.isComplete;
-      setTimeout(async () => {
-        await this.toggleComplete(todo);
-        this.isComplete = !this.isComplete;
-      }, 2000);
-    },
-    openTodoMenu($event, id) {
-      this.menuToShow = id;
-
-      let element = document.getElementById(id);
-      const rect = element.getBoundingClientRect();
-      this.clickX = $event.clientX - rect.left;
-      this.clickY = $event.clientY - rect.top;
-
-      this.showTodoMenu = true;
-    },
-    hideTodoMenu() {
-      this.showTodoMenu = false;
-      this.menuToShow = undefined;
-      this.clickX = undefined;
-      this.clickY = undefined;
-    },
-    openEditModal() {
-      this.showEditModal = true;
     }
   }
 };
@@ -390,8 +233,5 @@ export default {
 <style scoped>
 .list-group {
   height: 100%;
-}
-.list-group-item {
-  padding: 1em;
 }
 </style>

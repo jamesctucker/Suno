@@ -26,6 +26,7 @@
           href="#"
           class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
+          @click="openListsModal"
         >
           <!-- Heroicon name: solid/arrow-circle-right -->
           <svg
@@ -41,7 +42,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          Move
+          Move to list
         </a>
       </div>
       <div class="py-1" role="none">
@@ -69,22 +70,41 @@
         </a>
       </div>
     </div>
+    <lists-modal
+      :show-modal="showListsModal"
+      @closed="closeListsModal"
+      :todo="todo"
+    />
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import ListsModal from "../lists/ListsModal.vue";
+
 export default {
   name: "TodoMenu",
+  components: { ListsModal },
   props: {
     xPosition: Number,
     yPosition: Number,
     todo: Object
   },
+  data() {
+    return {
+      showListsModal: false
+    };
+  },
   methods: {
     ...mapActions("todos", ["deleteTodo"]),
     handleDelete() {
       this.deleteTodo(this.todo);
+    },
+    openListsModal() {
+      this.showListsModal = true;
+    },
+    closeListsModal() {
+      this.showListsModal = false;
     }
   }
 };

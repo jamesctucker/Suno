@@ -1,5 +1,4 @@
 import { DataStore } from "aws-amplify";
-import { deleteTodo, updateTodo } from "~/src/graphql/mutations";
 import { Todo } from "../src/models";
 
 export const state = () => ({
@@ -13,6 +12,11 @@ export const getters = {
       .filter(todo => todo.priority > 0)
       .sort((a, b) => a.priority - b.priority)
       .shift();
+  },
+  defaultTodos(state, getters) {
+    return state.todos.filter(
+      todo => todo.listID === "default" && !todo.complete && todo.priority === 0
+    );
   },
   unassignedTodos(state, getters, rootState) {
     return state.todos
@@ -92,15 +96,15 @@ export const actions = {
     const response = await DataStore.query(Todo);
     commit("setTodos", response);
   },
-  async updateTodo(_, { originalTodo, newParams }) {
+  async updateTodo({ dispatch }, { originalTodo, newParams }) {
     try {
-      const response = await DataStore.save(
+      await DataStore.save(
         Todo.copyOf(originalTodo, todo => {
           todo.name = newParams.name;
           todo.note = newParams.note;
         })
       );
-      console.dir(response);
+      dispatch("loadTodos");
     } catch (error) {
       console.log(error);
     }
@@ -131,6 +135,18 @@ export const actions = {
       console.error(error);
     }
   },
+  async updateList({ dispatch }, { originalTodo, listId }) {
+    try {
+      await DataStore.save(
+        Todo.copyOf(originalTodo, todo => {
+          todo.listID = listId;
+        })
+      );
+      dispatch("loadTodos");
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async toggleComplete({ dispatch }, original) {
     await DataStore.save(
       Todo.copyOf(original, updated => {
@@ -147,6 +163,5 @@ export const actions = {
     const response = await DataStore.delete(Todo, todo =>
       todo.listID("eq", listId)
     );
-    console.log("batch deleting todos", response);
   }
 };
