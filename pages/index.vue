@@ -485,7 +485,8 @@ export default {
       if (data.payload.data?.isDeltaSync) {
        this.isSynced = data.payload.data.isDeltaSync
       }
-    })
+    }),
+    this.setCurrentList('default');
   },
   beforeDestroy() {
     return this.checkAuthState();
