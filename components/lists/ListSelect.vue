@@ -1,13 +1,12 @@
 <template>
   <div class="ListSelect flex flex-col justify-between space-y-1 px-2 h-full">
     <div class="flex flex-col mt-8">
-      <a
+      <nuxt-link
         v-for="list in lists"
         :id="`${list.id}`"
         :key="list.id"
+        to="/matrix"
         class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md relative"
-        @click="setList(list.id)"
-        @contextmenu.prevent="openListMenu($event, list.id)"
       >
         <svg
           class="mr-3 h-6 w-6 text-purple-300"
@@ -23,8 +22,12 @@
             d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
           />
         </svg>
-        {{ list.name }}
-
+        <p
+          @click="setList(list.id)"
+          @contextmenu.prevent="openListMenu($event, list.id)"
+        >
+          {{ list.name }}
+        </p>
         <list-menu
           v-show="listMenuIsOpen && list.id === menuToShow"
           :x-position="clickX"
@@ -37,7 +40,7 @@
           class="outside z-20 bg-gray-300 bg-opacity-20"
           @click="closeListMenu"
         ></div>
-      </a>
+      </nuxt-link>
     </div>
 
     <button
