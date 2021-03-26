@@ -1,5 +1,5 @@
 <template>
-  <div class="TodoInput flex flex-row items-center mr-4 ">
+  <div class="TodoInput flex flex-row items-center">
     <label for="todo" class="sr-only">New Todo</label>
     <input
       v-model="todo"
@@ -14,17 +14,19 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "TodoInput",
-  props: {
-    user: Object
-  },
   data() {
     return {
       todo: undefined
     };
+  },
+  computed: {
+    ...mapState({
+      user: state => state.user.user
+    })
   },
   methods: {
     ...mapActions("todos", ["createTodo"]),

@@ -13,6 +13,11 @@ export const getters = {
       .sort((a, b) => a.priority - b.priority)
       .shift();
   },
+  defaultTodos(state, getters) {
+    return state.todos.filter(
+      todo => todo.listID === "default" && !todo.complete && todo.priority === 0
+    );
+  },
   unassignedTodos(state, getters, rootState) {
     return state.todos
       .filter(
@@ -128,6 +133,18 @@ export const actions = {
       dispatch("loadTodos");
     } catch (error) {
       console.error(error);
+    }
+  },
+  async updateList({ dispatch }, { originalTodo, listId }) {
+    try {
+      await DataStore.save(
+        Todo.copyOf(originalTodo, todo => {
+          todo.listID = listId;
+        })
+      );
+      dispatch("loadTodos");
+    } catch (error) {
+      console.log(error);
     }
   },
   async toggleComplete({ dispatch }, original) {

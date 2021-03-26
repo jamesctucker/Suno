@@ -8,6 +8,9 @@
   "ListsListSelect": {
     "description": "Auto imported from components/lists/ListSelect.vue"
   },
+  "ListsModal": {
+    "description": "Auto imported from components/lists/ListsModal.vue"
+  },
   "TodosEditModal": {
     "description": "Auto imported from components/todos/EditModal.vue"
   },
@@ -16,6 +19,9 @@
   },
   "TodosTodoInput": {
     "description": "Auto imported from components/todos/TodoInput.vue"
+  },
+  "TodosTodoList": {
+    "description": "Auto imported from components/todos/TodoList.vue"
   },
   "TodosTodoMenu": {
     "description": "Auto imported from components/todos/TodoMenu.vue"

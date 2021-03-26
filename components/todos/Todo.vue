@@ -4,6 +4,7 @@
       <p
         class="todo-text text-sm font-medium text-gray-700 truncate"
         :class="{ 'line-through': isComplete }"
+        :id="todo.id"
         @contextmenu.prevent="openTodoMenu($event, todo.id)"
         @dblclick="openEditModal(todo.id)"
       >
@@ -25,20 +26,20 @@
           </svg>
         </button>
       </div>
-      <!-- action modals -->
-      <todo-menu
-        v-show="showTodoMenu && todo.id === menuToShow"
-        v-on-clickaway="hideTodoMenu"
-        :x-position="clickX"
-        :y-position="clickY"
-        :todo="todo"
-      />
-      <edit-modal
-        :is-open="showEditModal && todo.id === modalToShow"
-        :todo="todo"
-        @closed="hideEditModal"
-      />
     </div>
+    <!-- action modals -->
+    <todo-menu
+      v-show="showTodoMenu && todo.id === menuToShow"
+      v-on-clickaway="hideTodoMenu"
+      :x-position="clickX"
+      :y-position="clickY"
+      :todo="todo"
+    />
+    <edit-modal
+      :is-open="showEditModal && todo.id === modalToShow"
+      :todo="todo"
+      @closed="hideEditModal"
+    />
   </div>
 </template>
 
@@ -73,9 +74,9 @@ export default {
     ...mapActions("todos", ["toggleComplete"]),
     openTodoMenu($event, id) {
       this.menuToShow = id;
+      let element = document.getElementById(id);
 
-      let todo = document.getElementById(id);
-      const rect = todo.getBoundingClientRect();
+      const rect = element.getBoundingClientRect();
       this.clickX = $event.clientX - rect.left;
       this.clickY = $event.clientY - rect.top;
 
