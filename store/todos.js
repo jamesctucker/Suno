@@ -1,5 +1,4 @@
 import { DataStore } from "aws-amplify";
-import { deleteTodo, updateTodo } from "~/src/graphql/mutations";
 import { Todo } from "../src/models";
 
 export const state = () => ({

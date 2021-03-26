@@ -99,6 +99,7 @@ amplify/backend/awscloudformation
 amplify/backend/.temp
 build/
 dist/
+nuxt-dist/
 node_modules/
 awsconfiguration.json
 amplifyconfiguration.json

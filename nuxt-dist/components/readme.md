@@ -10,5 +10,6 @@ You can directly use them in pages and other components without the need to impo
 - `<ListsListMenu>` | `<lists-list-menu>` (components/lists/ListMenu.vue)
 - `<ListsListSelect>` | `<lists-list-select>` (components/lists/ListSelect.vue)
 - `<TodosEditModal>` | `<todos-edit-modal>` (components/todos/EditModal.vue)
+- `<TodosTodo>` | `<todos-todo>` (components/todos/Todo.vue)
 - `<TodosTodoInput>` | `<todos-todo-input>` (components/todos/TodoInput.vue)
 - `<TodosTodoMenu>` | `<todos-todo-menu>` (components/todos/TodoMenu.vue)

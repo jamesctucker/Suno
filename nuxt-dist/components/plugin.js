@@ -5,6 +5,7 @@ const components = {
   ListsListMenu: () => import('../../components/lists/ListMenu.vue' /* webpackChunkName: "components/lists-list-menu" */).then(c => c.default || c),
   ListsListSelect: () => import('../../components/lists/ListSelect.vue' /* webpackChunkName: "components/lists-list-select" */).then(c => c.default || c),
   TodosEditModal: () => import('../../components/todos/EditModal.vue' /* webpackChunkName: "components/todos-edit-modal" */).then(c => c.default || c),
+  TodosTodo: () => import('../../components/todos/Todo.vue' /* webpackChunkName: "components/todos-todo" */).then(c => c.default || c),
   TodosTodoInput: () => import('../../components/todos/TodoInput.vue' /* webpackChunkName: "components/todos-todo-input" */).then(c => c.default || c),
   TodosTodoMenu: () => import('../../components/todos/TodoMenu.vue' /* webpackChunkName: "components/todos-todo-menu" */).then(c => c.default || c)
 }
