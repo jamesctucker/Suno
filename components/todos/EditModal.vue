@@ -18,6 +18,7 @@
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"
+          v-on-clickaway="close"
         >
           <div class="sm:flex sm:items-start">
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
@@ -87,9 +88,11 @@
 
 <script>
 import { mapActions } from "vuex";
+import { mixin as clickaway } from "vue-clickaway";
 
 export default {
   name: "EditModal",
+  mixins: [clickaway],
   props: {
     isOpen: Boolean,
     todo: Object
@@ -112,6 +115,10 @@ export default {
         note: this.note
       };
       await this.updateTodo({ originalTodo: this.todo, newParams: newParams });
+    },
+    close(event) {
+      console.log("closing");
+      this.$emit("closed", event);
     }
   }
 };

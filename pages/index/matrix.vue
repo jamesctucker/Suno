@@ -205,16 +205,16 @@
               </p>
               <todo-menu
                 v-show="showTodoMenu && element.id === menuToShow"
+                v-on-clickaway="hideTodoMenu"
                 :x-position="clickX"
                 :y-position="clickY"
                 :todo="element"
               />
-              <edit-modal :is-open="showEditModal" :todo="element" />
-              <div
-                v-show="showTodoMenu"
-                class="outside"
-                @click="hideTodoMenu"
-              ></div>
+              <edit-modal
+                :is-open="showEditModal"
+                :todo="element"
+                @closed="hideEditModal"
+              />
             </div>
           </draggable>
         </div>
@@ -226,6 +226,7 @@
 <script>
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
+import { mixin as clickaway } from "vue-clickaway";
 import TodoMenu from "~/components/todos/TodoMenu.vue";
 import EditModal from "~/components/todos/EditModal.vue";
 
@@ -234,6 +235,7 @@ export default {
     return route.fullPath;
   },
   name: "Matrix",
+  mixins: [clickaway],
   components: {
     draggable,
     TodoMenu,
@@ -383,6 +385,9 @@ export default {
     },
     openEditModal() {
       this.showEditModal = true;
+    },
+    hideEditModal() {
+      this.showEditModal = false;
     }
   }
 };
