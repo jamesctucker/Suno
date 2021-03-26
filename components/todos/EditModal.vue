@@ -1,6 +1,5 @@
 <template>
   <div class="EditModal">
-    <!--  Create new list modal -->
     <div v-if="isOpen" class="fixed z-10 inset-0 overflow-y-auto">
       <div
         class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
@@ -46,7 +45,7 @@
                     v-model="name"
                     type="text"
                     name="name-input"
-                    id="name-input"
+                    :id="todo.id"
                     class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     :placeholder="todo.name"
                     @keydown.enter="handleUpdateTodo"
@@ -57,7 +56,7 @@
                 <textarea
                   v-model="note"
                   name="note-input"
-                  id="note-input"
+                  :id="todo.id"
                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder="Notes"
                   rows="3"
@@ -70,14 +69,9 @@
             <button
               type="button"
               class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+              @click="handleUpdateTodo"
             >
-              Create
-            </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Cancel
+              Save
             </button>
           </div>
         </div>
@@ -115,9 +109,9 @@ export default {
         note: this.note
       };
       await this.updateTodo({ originalTodo: this.todo, newParams: newParams });
+      this.close();
     },
     close(event) {
-      console.log("closing");
       this.$emit("closed", event);
     }
   }

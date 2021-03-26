@@ -92,15 +92,15 @@ export const actions = {
     const response = await DataStore.query(Todo);
     commit("setTodos", response);
   },
-  async updateTodo(_, { originalTodo, newParams }) {
+  async updateTodo({ dispatch }, { originalTodo, newParams }) {
     try {
-      const response = await DataStore.save(
+      await DataStore.save(
         Todo.copyOf(originalTodo, todo => {
           todo.name = newParams.name;
           todo.note = newParams.note;
         })
       );
-      console.dir(response);
+      dispatch("loadTodos");
     } catch (error) {
       console.log(error);
     }
@@ -147,6 +147,5 @@ export const actions = {
     const response = await DataStore.delete(Todo, todo =>
       todo.listID("eq", listId)
     );
-    console.log("batch deleting todos", response);
   }
 };

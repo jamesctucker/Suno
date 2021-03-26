@@ -11,6 +11,9 @@
   "TodosEditModal": {
     "description": "Auto imported from components/todos/EditModal.vue"
   },
+  "TodosTodoInput": {
+    "description": "Auto imported from components/todos/TodoInput.vue"
+  },
   "TodosTodoMenu": {
     "description": "Auto imported from components/todos/TodoMenu.vue"
   }

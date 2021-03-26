@@ -166,18 +166,7 @@
       </div>
       <!-- column 2 -->
       <div class="flex flex-col justify-start items-left ml-4 w-1/2 lg:w-1/4">
-        <div class="flex flex-row items-center mr-4 ">
-          <label for="todo" class="sr-only">Email</label>
-          <input
-            v-model="todo"
-            type="text"
-            name="todo"
-            id="todo"
-            class="shadow-sm focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            placeholder="Enter a todo"
-            @keyup.enter="create"
-          />
-        </div>
+        <todo-input :user="user" />
         <div class="flex">
           <draggable
             class="list-group mt-4"
@@ -193,7 +182,7 @@
               v-for="element in unassigned"
               :key="element.todo"
               @contextmenu.prevent="openTodoMenu($event, element.id)"
-              @dblclick="openEditModal"
+              @dblclick="openEditModal(element.id)"
             >
               <input
                 type="checkbox"
@@ -211,7 +200,7 @@
                 :todo="element"
               />
               <edit-modal
-                :is-open="showEditModal"
+                :is-open="showEditModal && element.id === modalToShow"
                 :todo="element"
                 @closed="hideEditModal"
               />
@@ -229,6 +218,7 @@ import draggable from "vuedraggable";
 import { mixin as clickaway } from "vue-clickaway";
 import TodoMenu from "~/components/todos/TodoMenu.vue";
 import EditModal from "~/components/todos/EditModal.vue";
+import TodoInput from "~/components/todos/TodoInput.vue";
 
 export default {
   key(route) {
@@ -239,16 +229,14 @@ export default {
   components: {
     draggable,
     TodoMenu,
-    EditModal
+    EditModal,
+    TodoInput
   },
   props: {
     user: Object
   },
   data() {
     return {
-      todo: undefined,
-      note: undefined,
-      priority: undefined,
       unassigned: undefined,
       priority1: undefined,
       priority2: undefined,
@@ -261,6 +249,7 @@ export default {
       clickX: undefined,
       clickY: undefined,
       menuToShow: undefined,
+      modalToShow: undefined,
       showEditModal: false
     };
   },
@@ -275,10 +264,7 @@ export default {
       "priorityTwoTodos",
       "priorityThreeTodos",
       "priorityFourTodos"
-    ]),
-    disabled() {
-      return !this.todo;
-    }
+    ])
   },
   watch: {
     todos: function() {
@@ -306,7 +292,6 @@ export default {
   },
   methods: {
     ...mapActions("todos", [
-      "createTodo",
       "loadTodos",
       "updatePriority",
       "updateOrder",
@@ -314,19 +299,6 @@ export default {
       "deleteTodo"
     ]),
     ...mapMutations("lists", ["setCurrentList"]),
-    async create() {
-      await this.createTodo({
-        userID: this.user.id,
-        name: this.todo,
-        note: this.note
-      });
-      this.resetField();
-    },
-    resetField() {
-      this.todo = undefined;
-      this.note = undefined;
-      this.priority = undefined;
-    },
     change($event, list, priority) {
       if ($event.added) {
         this.addTodo($event, priority);
@@ -383,10 +355,12 @@ export default {
       this.clickX = undefined;
       this.clickY = undefined;
     },
-    openEditModal() {
+    openEditModal(id) {
+      this.modalToShow = id;
       this.showEditModal = true;
     },
     hideEditModal() {
+      this.modalToShow = undefined;
       this.showEditModal = false;
     }
   }
