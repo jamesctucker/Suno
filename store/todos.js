@@ -59,6 +59,9 @@ export const getters = {
         !todo.complete &&
         todo.listID === rootState.lists.currentList
     );
+  },
+  todosWithDeadlines(state) {
+    return state.todos ? state.todos.filter(todo => todo.deadline) : undefined;
   }
 };
 
@@ -147,6 +150,14 @@ export const actions = {
       console.log(error);
     }
   },
+  async updateDeadline({ dispatch }, { todo, datetime }) {
+    await DataStore.save(
+      Todo.copyOf(todo, updated => {
+        updated.deadline = datetime;
+      })
+    );
+    dispatch("loadTodos");
+  },
   async toggleComplete({ dispatch }, original) {
     await DataStore.save(
       Todo.copyOf(original, updated => {
@@ -160,8 +171,6 @@ export const actions = {
     dispatch("loadTodos");
   },
   async batchDeleteTodos({ dispatch }, listId) {
-    const response = await DataStore.delete(Todo, todo =>
-      todo.listID("eq", listId)
-    );
+    await DataStore.delete(Todo, todo => todo.listID("eq", listId));
   }
 };
