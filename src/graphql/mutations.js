@@ -1,19 +1,164 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createList = /* GraphQL */ `
+  mutation CreateList(
+    $input: CreateListInput!
+    $condition: ModelListConditionInput
+  ) {
+    createList(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      User {
+        username
+        createdAt
+        updatedAt
+        id
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      Todos {
+        items {
+          userID
+          name
+          note
+          priority
+          order
+          complete
+          deadline
+          createdAt
+          updatedAt
+          id
+          listID
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
+    }
+  }
+`;
+export const updateList = /* GraphQL */ `
+  mutation UpdateList(
+    $input: UpdateListInput!
+    $condition: ModelListConditionInput
+  ) {
+    updateList(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      User {
+        username
+        createdAt
+        updatedAt
+        id
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      Todos {
+        items {
+          userID
+          name
+          note
+          priority
+          order
+          complete
+          deadline
+          createdAt
+          updatedAt
+          id
+          listID
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
+    }
+  }
+`;
+export const deleteList = /* GraphQL */ `
+  mutation DeleteList(
+    $input: DeleteListInput!
+    $condition: ModelListConditionInput
+  ) {
+    deleteList(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      User {
+        username
+        createdAt
+        updatedAt
+        id
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      Todos {
+        items {
+          userID
+          name
+          note
+          priority
+          order
+          complete
+          deadline
+          createdAt
+          updatedAt
+          id
+          listID
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
+        nextToken
+        startedAt
+      }
+    }
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
     $condition: ModelUserConditionInput
   ) {
     createUser(input: $input, condition: $condition) {
-      id
       username
       createdAt
       updatedAt
+      id
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -23,13 +168,14 @@ export const updateUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     updateUser(input: $input, condition: $condition) {
-      id
       username
       createdAt
       updatedAt
+      id
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -39,13 +185,14 @@ export const deleteUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     deleteUser(input: $input, condition: $condition) {
-      id
       username
       createdAt
       updatedAt
+      id
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -55,18 +202,21 @@ export const createTodo = /* GraphQL */ `
     $condition: ModelTodoConditionInput
   ) {
     createTodo(input: $input, condition: $condition) {
-      id
       userID
       name
       note
       priority
       order
       complete
+      deadline
       createdAt
       updatedAt
+      id
+      listID
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -76,18 +226,21 @@ export const updateTodo = /* GraphQL */ `
     $condition: ModelTodoConditionInput
   ) {
     updateTodo(input: $input, condition: $condition) {
-      id
       userID
       name
       note
       priority
       order
       complete
+      deadline
       createdAt
       updatedAt
+      id
+      listID
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -97,18 +250,21 @@ export const deleteTodo = /* GraphQL */ `
     $condition: ModelTodoConditionInput
   ) {
     deleteTodo(input: $input, condition: $condition) {
-      id
       userID
       name
       note
       priority
       order
       complete
+      deadline
       createdAt
       updatedAt
+      id
+      listID
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
