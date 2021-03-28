@@ -23,12 +23,6 @@
         Day
       </nuxt-link>
     </span>
-    <!-- <v-calendar
-      v-if="loaded"
-      class="mt-4"
-      is-expanded
-      :attributes="attributes"
-    /> -->
     <nuxt-child />
   </div>
 </template>

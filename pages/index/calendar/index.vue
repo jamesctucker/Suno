@@ -33,12 +33,6 @@ export default {
         }))
       ];
     }
-  },
-  beforeMount() {
-    if (!this.loaded) this.loadTodos();
-  },
-  methods: {
-    ...mapActions("todos", ["loadTodos"])
   }
 };
 </script>

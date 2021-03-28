@@ -12,7 +12,7 @@
       </p>
       <div class="todo-actions flex flex-row">
         <button
-          class="p-2 hover:bg-purple-200 rounded-l focus:bg-purple-500 focus:text-white focus:border-purple-500 focus:outline-none"
+          class="p-2 hover:text-purple-200 rounded-l focus:text-white focus:border-purple-500 focus:outline-none"
           @click="completeTodo"
         >
           <svg
@@ -38,7 +38,7 @@
           <template v-slot="{ togglePopover, inputValue }">
             <div class="flex items-center">
               <button
-                class="p-2 hover:bg-purple-200 rounded-l focus:bg-purple-500 focus:text-white focus:border-purple-500 focus:outline-none"
+                class="p-2 hover:text-purple-200 rounded-l focus:text-white focus:border-purple-500 focus:outline-none"
                 @click="togglePopover()"
               >
                 <svg
