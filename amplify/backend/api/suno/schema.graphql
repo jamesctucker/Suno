@@ -1,4 +1,6 @@
-type List @model @auth(rules: [{allow: owner, operations: [read, create, update, delete]}]) {
+type List
+  @model
+  @auth(rules: [{ allow: owner, operations: [read, create, update, delete] }]) {
   id: ID!
   name: String!
   User: User @connection
@@ -7,23 +9,29 @@ type List @model @auth(rules: [{allow: owner, operations: [read, create, update,
   updatedAt: AWSDateTime
 }
 
-type User @model @key(name: "byUserName", fields: ["username"], queryField: "userByUserName") @auth(rules: [{allow: owner, operations: [read, create, update, delete]}]) {
+type User
+  @model
+  @key(name: "byUserName", fields: ["username"], queryField: "userByUserName")
+  @auth(rules: [{ allow: owner, operations: [read, create, update, delete] }]) {
   username: String
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
   id: ID!
 }
 
-type Todo @model @key(name: "byList", fields: ["listID"]) @auth(rules: [{allow: owner, operations: [read, create, update, delete]}]) {
+type Todo
+  @model
+  @key(name: "byList", fields: ["listID"])
+  @auth(rules: [{ allow: owner, operations: [read, create, update, delete] }]) {
   userID: ID!
   name: String!
   note: String
   priority: Int
   order: Int
   complete: Boolean
+  deadline: AWSDateTime
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
   id: ID!
   listID: ID
 }
- 

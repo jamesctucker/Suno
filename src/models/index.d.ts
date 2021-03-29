@@ -32,6 +32,7 @@ export declare class Todo {
   readonly priority?: number;
   readonly order?: number;
   readonly complete?: boolean;
+  readonly deadline?: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   readonly listID?: string;

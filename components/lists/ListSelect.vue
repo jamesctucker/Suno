@@ -1,46 +1,46 @@
 <template>
   <div class="ListSelect flex flex-col justify-between space-y-1 px-2 h-full">
     <div class="flex flex-col mt-8">
-      <nuxt-link
+      <div
         v-for="list in lists"
         :id="`${list.id}`"
         :key="list.id"
-        to="/matrix"
-        class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md relative"
+        @click="goToList(list)"
       >
-        <svg
-          class="mr-3 h-6 w-6 text-purple-300"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+        <a
+          class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md relative"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          <svg
+            class="mr-3 h-6 w-6 text-purple-300"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+            />
+          </svg>
+          <p @contextmenu.prevent="openListMenu($event, list.id)">
+            {{ list.name }}
+          </p>
+          <list-menu
+            v-show="listMenuIsOpen && list.id === menuToShow"
+            :x-position="clickX"
+            :y-position="clickY"
+            :list="list"
+            @closed="closeListMenu"
           />
-        </svg>
-        <p
-          @click="setList(list.id)"
-          @contextmenu.prevent="openListMenu($event, list.id)"
-        >
-          {{ list.name }}
-        </p>
-        <list-menu
-          v-show="listMenuIsOpen && list.id === menuToShow"
-          :x-position="clickX"
-          :y-position="clickY"
-          :list="list"
-          @closed="closeListMenu"
-        />
-        <div
-          v-show="listMenuIsOpen"
-          class="outside z-20 bg-gray-300 bg-opacity-20"
-          @click="closeListMenu"
-        ></div>
-      </nuxt-link>
+          <div
+            v-show="listMenuIsOpen"
+            class="outside z-20 bg-gray-300 bg-opacity-20"
+            @click="closeListMenu"
+          ></div>
+        </a>
+      </div>
     </div>
 
     <button
@@ -175,9 +175,6 @@ export default {
       this.isOpen = false;
       this.listName = undefined;
     },
-    setList(listId) {
-      this.setCurrentList(listId);
-    },
     openListMenu($event, id) {
       this.menuToShow = id;
 
@@ -193,6 +190,10 @@ export default {
       this.menuToShow = undefined;
       this.clickX = undefined;
       this.clickY = undefined;
+    },
+    async goToList(list) {
+      await this.setCurrentList(list.id);
+      this.$router.push("/matrix");
     }
   }
 };

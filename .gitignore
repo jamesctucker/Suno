@@ -70,6 +70,8 @@ typings/
 
 # Nuxt generate
 dist
+nuxt-dist/
+nuxt-dist
 
 # vuepress build output
 .vuepress/dist
@@ -99,7 +101,6 @@ amplify/backend/awscloudformation
 amplify/backend/.temp
 build/
 dist/
-nuxt-dist/
 node_modules/
 awsconfiguration.json
 amplifyconfiguration.json

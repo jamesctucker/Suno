@@ -12,16 +12,24 @@
           aria-hidden="true"
           >&#8203;</span
         >
-        <div
-          class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-headline"
-          v-on-clickaway="close"
+        <transition
+          enter-active-class="transition ease-out duration-300"
+          enter-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enter-to-class="opacity-100 translate-y-0 sm:scale-100"
+          leave-active-class="transition ease-in duration-200"
+          leave-class="opacity-100 translate-y-0 sm:scale-100"
+          leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
-          <div class="sm:flex sm:items-start">
-            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-              <!-- <h3
+          <div
+            class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-headline"
+            v-on-clickaway="close"
+          >
+            <div class="sm:flex sm:items-start">
+              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                <!-- <h3
                   class="text-lg leading-6 font-medium text-gray-900"
                   id="modal-headline"
                 >
@@ -34,47 +42,48 @@
                     forever. This action cannot be undone.
                   </p>
                 </div> -->
-              <div>
-                <label
-                  for="input"
-                  class="block text-sm font-medium text-gray-700"
-                  >Edit Todo</label
-                >
+                <div>
+                  <label
+                    for="input"
+                    class="block text-sm font-medium text-gray-700"
+                    >Edit Todo</label
+                  >
+                  <div class="mt-3">
+                    <input
+                      v-model="name"
+                      type="text"
+                      name="name-input"
+                      :id="todo.id"
+                      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      :placeholder="todo.name"
+                      @keydown.enter="handleUpdateTodo"
+                    />
+                  </div>
+                </div>
                 <div class="mt-3">
-                  <input
-                    v-model="name"
-                    type="text"
-                    name="name-input"
+                  <textarea
+                    v-model="note"
+                    name="note-input"
                     :id="todo.id"
                     class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    :placeholder="todo.name"
+                    placeholder="Notes"
+                    rows="3"
                     @keydown.enter="handleUpdateTodo"
                   />
                 </div>
               </div>
-              <div class="mt-3">
-                <textarea
-                  v-model="note"
-                  name="note-input"
-                  :id="todo.id"
-                  class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                  placeholder="Notes"
-                  rows="3"
-                  @keydown.enter="handleUpdateTodo"
-                />
-              </div>
+            </div>
+            <div class="mt-3 text-center sm:mt-4 sm:ml-4 sm:text-left sm:flex">
+              <button
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+                @click="handleUpdateTodo"
+              >
+                Save
+              </button>
             </div>
           </div>
-          <div class="mt-3 text-center sm:mt-4 sm:ml-4 sm:text-left sm:flex">
-            <button
-              type="button"
-              class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-              @click="handleUpdateTodo"
-            >
-              Save
-            </button>
-          </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>

@@ -163,7 +163,7 @@
               <h1></h1>
             </div>
             <div class="mt-5 flex-1 flex flex-col justify-between">
-              <nav class="px-2 space-y-1">
+              <nav class="px-2 space-y-3">
                 <!-- Current: "bg-indigo-800 text-white", Default: "text-purple-100 hover:bg-purple-600" -->
                 <nuxt-link
                   to="/"
@@ -240,6 +240,25 @@
                   </svg>
                   Prioritize
                 </nuxt-link>
+                <nuxt-link
+                  to="/calendar"
+                  class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                  ><svg
+                    class="mr-3 h-6 w-6 text-purple-300"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Calendar</nuxt-link
+                >
               </nav>
               <div class="flex-1">
                 <list-select />
@@ -419,14 +438,14 @@
               <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
             </div> -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <div class="flex flex-col justify-center items-start mt-8">
+              <div class="flex flex-col items-start mt-8">
                 <!-- <p v-show="!isOnline">
                   You are offline
                 </p>
                 <p v-show="isSynced">
                   Data synced!
                 </p> -->
-                <div v-if="todos && this.$route.name === 'index'" class="w-1/3">
+                <div v-if="todos && this.$route.name === 'index'" class="w-1/2">
                   <todo-input />
                   <todo-list class="mx-4 mt-4" :todos="defaultTodos" />
                 </div>
@@ -494,8 +513,7 @@ export default {
       if (data.payload.data?.isDeltaSync) {
        this.isSynced = data.payload.data.isDeltaSync
       }
-    }),
-    this.setCurrentList('default');
+    })
   },
   beforeDestroy() {
     return this.checkAuthState();
