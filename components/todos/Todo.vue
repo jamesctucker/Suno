@@ -12,11 +12,11 @@
       </p>
       <div class="todo-actions flex flex-row">
         <button
-          class="p-2 hover:text-purple-200 rounded-l focus:text-white focus:border-purple-500 focus:outline-none"
+          class="p-1 hover:text-purple-200 rounded-l focus:text-white focus:border-purple-500 focus:outline-none"
           @click="completeTodo"
         >
           <svg
-            class="h-5 w-5 mr-2"
+            class="h-4 w-4"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -31,18 +31,18 @@
 
         <v-date-picker
           v-model="date"
-          class="h-full flex-end"
+          class="h-full"
           @dayclick="addToCalendar"
           :min-date="new Date()"
         >
           <template v-slot="{ togglePopover, inputValue }">
             <div class="flex items-center">
               <button
-                class="p-2 hover:text-purple-200 rounded-l focus:text-white focus:border-purple-500 focus:outline-none"
+                class="p-1 hover:text-purple-200 rounded-l focus:text-white focus:border-purple-500 focus:outline-none"
                 @click="togglePopover()"
               >
                 <svg
-                  class="w-5 h-5"
+                  class="w-4 h-4"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -57,7 +57,7 @@
               <input
                 v-if="todo.deadline"
                 :value="inputValue"
-                class="bg-white text-gray-700 w-1/2 py-1 px-2 appearance-none border rounded-r focus:outline-none focus:border-purple-500"
+                class="bg-white text-gray-700 text-sm py-1 px-2 appearance-none border rounded-r focus:outline-none focus:border-purple-500"
                 readonly
               />
             </div>

@@ -1,11 +1,6 @@
 <template>
   <div class="Month w-full">
-    <v-calendar
-      v-if="loaded"
-      class="mt-4"
-      is-expanded
-      :attributes="attributes"
-    />
+    <v-calendar v-if="loaded" is-expanded :attributes="attributes" />
   </div>
 </template>
 
@@ -13,6 +8,9 @@
 import { mapGetters, mapState, mapActions } from "vuex";
 export default {
   name: "Month",
+  props: {
+    currentList: Object
+  },
   computed: {
     ...mapState({
       loaded: state => state.todos.loaded
@@ -20,7 +18,7 @@ export default {
     ...mapGetters("todos", ["todosWithDeadlines"]),
     attributes() {
       return [
-        ...this.todosWithDeadlines.map(todo => ({
+        ...this.filterTodosByCurrentList.map(todo => ({
           dates: todo.deadline,
           dot: {
             color: todo.color,
@@ -32,6 +30,15 @@ export default {
           customData: todo
         }))
       ];
+    },
+    filterTodosByCurrentList() {
+      if (this.currentList.name === "All") {
+        return this.todosWithDeadlines;
+      } else {
+        return this.todosWithDeadlines.filter(
+          todo => todo.listID === this.currentList.id
+        );
+      }
     }
   }
 };

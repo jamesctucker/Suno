@@ -61,7 +61,9 @@ export const getters = {
     );
   },
   todosWithDeadlines(state) {
-    return state.todos ? state.todos.filter(todo => todo.deadline) : undefined;
+    return state.todos
+      ? state.todos.filter(todo => todo.deadline && !todo.complete)
+      : undefined;
   }
 };
 
