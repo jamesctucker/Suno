@@ -1,7 +1,13 @@
 <template>
-  <div class="Today">
-    <h1>{{ today }}</h1>
-    <todo v-for="todo in todosForToday" :key="todo.id" :todo="todo" />
+  <div class="Today bg-white overflow-hidden shadow rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        {{ today }}
+      </h3>
+    </div>
+    <div class="bg-gray-50 px-4 py-5 sm:p-6">
+      <todo v-for="todo in todosForToday" :key="todo.id" :todo="todo" />
+    </div>
   </div>
 </template>
 
