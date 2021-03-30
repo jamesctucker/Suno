@@ -1,11 +1,7 @@
 <template>
   <div class="Week">
     <ul class="space-y-3">
-      <li
-        class="bg-white shadow overflow-hidden px-4 py-4 sm:px-6 sm:rounded-md"
-        v-for="(day, index) in weekDays"
-        :key="index"
-      >
+      <li v-for="(day, index) in weekDays" :key="index">
         <week-list :day="day" />
       </li>
     </ul>

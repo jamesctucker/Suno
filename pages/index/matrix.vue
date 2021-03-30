@@ -3,9 +3,36 @@
     <!-- <h1>
       Eisenhower Matrix
     </h1> -->
-    <div class="flex">
-      <!-- column 1 -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-1/2 lg:w-3/4 ">
+    <div class="flex flex-col md:flex-row">
+      <!-- column 2 -->
+      <div
+        class="flex flex-col justify-start items-left mb-4 md:mr-4 w-full md:w-1/2 lg:w-1/4"
+      >
+        <todo-input :user="user" />
+        <div class="flex">
+          <draggable
+            class="list-group mt-4 w-full"
+            v-model="unassigned"
+            group="todos"
+            @change="change($event, 'unassigned', 0)"
+            @start="start"
+            @end="end"
+          >
+            <div
+              class="list-group-item relative flex items-center h-5 ml-2 mb-2"
+              :id="`${element.id}`"
+              v-for="element in unassigned"
+              :key="element.todo"
+            >
+              <todo :todo="element" />
+            </div>
+          </draggable>
+        </div>
+      </div>
+      <!-- column 2 -->
+      <div
+        class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:w-1/2 lg:w-3/4 w-full "
+      >
         <div class="col-span-1 w-full h-64 bg-red-400 relative rounded-md">
           <draggable
             class="list-group divide-y-2 divide-red-400 divide-solid"
@@ -86,29 +113,6 @@
           <p class="absolute bottom-0 left-0 h-16 p-4 text-green-100">
             not important or urgent
           </p>
-        </div>
-      </div>
-      <!-- column 2 -->
-      <div class="flex flex-col justify-start items-left ml-4 w-1/2 lg:w-1/4">
-        <todo-input :user="user" />
-        <div class="flex">
-          <draggable
-            class="list-group mt-4 w-full"
-            v-model="unassigned"
-            group="todos"
-            @change="change($event, 'unassigned', 0)"
-            @start="start"
-            @end="end"
-          >
-            <div
-              class="list-group-item relative flex items-center h-5 ml-2 mb-2"
-              :id="`${element.id}`"
-              v-for="element in unassigned"
-              :key="element.todo"
-            >
-              <todo :todo="element" />
-            </div>
-          </draggable>
         </div>
       </div>
     </div>

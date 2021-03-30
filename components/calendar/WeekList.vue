@@ -1,12 +1,15 @@
 <template>
-  <div v-if="todosWithDeadlines" class="WeekList ">
-    <div class="bg-white px-4 py-5 sm:px-6">
+  <div
+    v-if="todosWithDeadlines"
+    class="WeekList bg-white overflow-hidden shadow rounded-lg"
+  >
+    <div class="px-4 py-5 sm:px-6">
       <h3 class="text-lg leading-6 font-medium text-gray-900">
         {{ weekday }}, {{ humanReadableDate }}
       </h3>
     </div>
-    <div class="px-4 py-2 sm:px-6" v-for="todo in todosForDay" :key="todo.id">
-      <todo :todo="todo" />
+    <div class="bg-gray-50 px-4 py-5 sm:p-6">
+      <todo v-for="todo in todosForDay" :key="todo.id" :todo="todo" />
     </div>
   </div>
 </template>
