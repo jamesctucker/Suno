@@ -4,14 +4,14 @@
       Eisenhower Matrix
     </h1> -->
     <div class="flex flex-col md:flex-row">
-      <!-- column 2 -->
+      <!-- column 1-->
       <div
         class="flex flex-col justify-start items-left mb-4 md:mr-4 w-full md:w-1/2 lg:w-1/4"
       >
         <todo-input :user="user" />
         <div class="flex">
           <draggable
-            class="list-group mt-4 w-full"
+            class="list-group mt-4 w-full space-y-3"
             v-model="unassigned"
             group="todos"
             @change="change($event, 'unassigned', 0)"

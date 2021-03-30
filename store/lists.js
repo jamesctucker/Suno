@@ -3,7 +3,8 @@ import { List } from "../src/models";
 
 export const state = () => ({
   lists: null,
-  currentList: null
+  // TODO: think of a better way to initially load default list
+  currentList: "default"
 });
 
 export const mutations = {
