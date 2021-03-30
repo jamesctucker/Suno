@@ -76,10 +76,10 @@
                 <!-- Current: "bg-indigo-800 text-white", Default: "text-purple-100 hover:bg-purple-600" -->
                 <nuxt-link
                   to="/"
-                  class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                  class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
                   <svg
-                    class="mr-3 h-6 w-6 text-purple-300"
+                    class="mr-4 h-6 w-6 text-purple-300"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -122,7 +122,7 @@
                   class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
                   <svg
-                    class="mr-3 h-6 w-6 text-purple-300"
+                    class="mr-4 h-6 w-6 text-purple-300"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -145,9 +145,9 @@
                 </nuxt-link>
                 <nuxt-link
                   to="/calendar"
-                  class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                  class="text-purple-100 hover:bg-purple-600 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                   ><svg
-                    class="mr-3 h-6 w-6 text-purple-300"
+                    class="mr-4 h-6 w-6 text-purple-300"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -471,7 +471,10 @@
                 <p v-show="isSynced">
                   Data synced!
                 </p> -->
-                <div v-if="todos && this.$route.name === 'index'" class="w-1/2">
+                <div
+                  v-if="todos && this.$route.name === 'index'"
+                  class="w-full md:w-1/2"
+                >
                   <todo-input />
                   <todo-list class="mx-4 mt-4" :todos="defaultTodos" />
                 </div>

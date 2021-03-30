@@ -2,7 +2,7 @@
   <div class="Todo w-full">
     <div class="todo-item flex flex-row items-center justify-between">
       <p
-        class="todo-text text-sm font-medium text-gray-700 truncate"
+        class="todo-text text-sm font-medium text-gray-700"
         :class="{ 'line-through': isComplete }"
         :id="todo.id"
         @contextmenu.prevent="openTodoMenu($event, todo.id)"
@@ -54,12 +54,12 @@
                   />
                 </svg>
               </button>
-              <input
+              <!-- <input
                 v-if="todo.deadline"
                 :value="inputValue"
                 class="bg-white text-gray-700 text-sm py-1 px-2 appearance-none border rounded-r focus:outline-none focus:border-purple-500"
                 readonly
-              />
+              /> -->
             </div>
           </template>
         </v-date-picker>
